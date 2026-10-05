@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import sqlite3
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -145,6 +146,23 @@ def _annotations_command(args: argparse.Namespace) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="AstroTrustBench offline development tools")
     commands = parser.add_subparsers(dest="command", required=True)
+    collect = commands.add_parser("collect", help="local exploratory manual frontend collector")
+    collect.add_argument("--root", type=Path, default=Path("."))
+    collect.add_argument(
+        "--database", type=Path, default=Path("data/pilot/manual-runs/collector.sqlite3")
+    )
+    collect.add_argument("--port", type=int, default=8765)
+    collect_actions = collect.add_subparsers(dest="collect_action")
+    collect_validate = collect_actions.add_parser(
+        "validate", help="validate JSONL or collector CSV"
+    )
+    collect_validate.add_argument("path", type=Path)
+    collect_import = collect_actions.add_parser("import", help="atomic import, no overwrites")
+    collect_import.add_argument("path", type=Path)
+    collect_export = collect_actions.add_parser("export", help="export complete local records")
+    collect_export.add_argument("--format", choices=("jsonl", "csv", "markdown"), required=True)
+    collect_export.add_argument("--run-id", help="single-run Markdown report")
+    collect_export.add_argument("--output", type=Path, required=True)
     validate = commands.add_parser(
         "validate", help="validate source scenarios and prompt structure"
     )
@@ -204,6 +222,11 @@ def main(argv: list[str] | None = None) -> int:
         )
     args = parser.parse_args(argv)
     try:
+        if args.command == "collect":
+            from astrotrust.collector.cli import command as collector_command
+
+            collector_command(args)
+            return 0
         if args.command == "review":
             _review_command(args)
             return 0
@@ -232,7 +255,7 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError(f"unknown scenario ID: {args.scenario_id}")
             for condition in belief_conditions():
                 print(canonical_json(render_prompt(selected, template, condition)), end="")
-    except (ValueError, OSError) as exc:
+    except (ValueError, OSError, sqlite3.Error) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
     return 0

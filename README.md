@@ -81,11 +81,32 @@ CLI defaults assume the repository root, with path overrides available.
 | `astrotrust/metrics/` | Provisional human-observation interfaces |
 | `astrotrust/annotations/` | Versioned response/comparison records, agreement and adjudication |
 | `astrotrust/reviews/`, `reviews/` | Offline construction-review exporter, example and blank forms |
+| `astrotrust/collector/` | Offline manual frontend pilot capture, immutable raw text and portable exports |
 | `docs/` | Methodology, benchmark card, ethics and terminology |
 | `experiments/` | Future run protocol; no API integration |
 | `survey/` | Scope boundary for a later consented human study |
 | `data/`, `analysis/` | Governance and future analysis constraints |
 | `tests/`, `tools/` | Offline invariants and schema export |
+
+## Exploratory manual capture
+
+The [AstroTrust Manual Collector](docs/manual-collector.md) captures responses that a
+researcher manually copies from public frontends. Launch from the repository root:
+
+```powershell
+uv run --locked python -m astrotrust collect
+```
+
+Open the printed local URL. Choose a scenario/condition, copy its exact prompt,
+manually start a fresh frontend conversation, paste its complete response and record
+the exact UI model label/settings. A local SQLite store preserves raw text, hashes
+and metadata revision history; JSONL, CSV and full Markdown reports provide exports.
+Raw pilot files under `data/pilot/` are Git ignored. No model request, scraping or
+scoring is performed. The initial 27-slot matrix starts empty. Collection remains
+**Exploratory Pilot — not frozen benchmark data** and satisfies no human-review gate.
+The collector has a separate `manual-1.0` schema; `instrument-v0.1` is unchanged.
+
+**Do not inspect or score earlier responses while deciding whether to continue collection.**
 
 ## Reproducibility and limits
 

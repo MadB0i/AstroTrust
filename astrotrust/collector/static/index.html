@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="collector-token" content="__SESSION_TOKEN__" />
+    <title>AstroTrust Manual Collector</title>
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/collector.css" />
+    <script src="/collector.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#capture">Skip to capture</a>
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">AstroTrust / Research instruments</p>
+        <h1>AstroTrust Manual Collector</h1>
+        <p>
+          Structured capture of frontend LLM responses for exploratory research
+        </p>
+      </div>
+      <div class="header-status">
+        <span class="badge">Exploratory Pilot</span>
+        <p>Saved runs: <strong id="saved-count">0</strong></p>
+        <span class="local">Local storage · no model connections</span>
+      </div>
+    </header>
+    <div class="status-strip" role="region" aria-label="Research status">
+      EXPLORATORY PILOT — NOT FROZEN BENCHMARK DATA
+    </div>
+    <nav aria-label="Collector sections">
+      <a href="#capture">Collect a response</a
+      ><a href="#saved">Saved runs &amp; exports</a>
+    </nav>
+    <main>
+      <div id="notice" role="status" aria-live="polite"></div>
+      <div id="error" role="alert" tabindex="-1" hidden></div>
+      <div class="workspace">
+        <form id="capture" novalidate>
+          <fieldset class="section">
+            <legend><span class="step">01</span> Experiment target</legend>
+            <p class="hint">
+              Select the target before copying. Each repeat uses a new frontend
+              conversation.
+            </p>
+            <div class="target-grid">
+              <label class="wide"
+                >Scenario<select id="scenario" name="scenario" required>
+                  <option>Loading scenarios…</option>
+                </select></label
+              >
+              <label
+                >Belief condition<select id="belief" name="belief">
+                  <option value="neutral">Neutral</option>
+                  <option value="positive_expectation">
+                    Positive expectation
+                  </option>
+                  <option value="negative_expectation">
+                    Negative expectation
+                  </option>
+                </select></label
+              >
+              <label
+                >Language<select id="language" name="language">
+                  <option value="en">English · development draft</option>
+                  <option value="hi" disabled>
+                    Hindi · translation pending
+                  </option>
+                  <option value="as" disabled>
+                    Assamese · translation pending
+                  </option>
+                </select></label
+              >
+              <label
+                >Run number<select id="run_number" name="run_number">
+                  <option value="1">Run 1</option>
+                  <option value="2">Run 2</option>
+                  <option value="3">Run 3</option>
+                </select></label
+              >
+            </div>
+            <details>
+              <summary>Other controlled dimensions</summary>
+              <div class="fields">
+                <label
+                  >Emotional framing<select id="emotion" name="emotion">
+                    <option value="neutral">Neutral</option>
+                    <option value="distressed">Distressed / vulnerable</option>
+                  </select></label
+                >
+                <label
+                  >Personalization framing<select
+                    id="personalization"
+                    name="personalization"
+                  >
+                    <option value="generic">Generic</option>
+                    <option value="explicitly_personalized">
+                      Explicitly personalized
+                    </option>
+                  </select></label
+                >
+              </div>
+              <p class="hint">
+                Hold these fixed across a belief trio. This changes prompt
+                framing, separate from frontend memory.
+              </p>
+            </details>
+          </fieldset>
+          <section class="section" aria-labelledby="prompt-heading">
+            <div class="section-top">
+              <h2 id="prompt-heading">
+                <span class="step">02</span> Exact prompt
+              </h2>
+              <button type="button" id="copy" disabled>Copy Prompt</button>
+            </div>
+            <p id="condition-id" class="mono wrap">
+              Loading canonical condition…
+            </p>
+            <label class="sr-only" for="prompt">Exact canonical prompt</label
+            ><textarea
+              id="prompt"
+              readonly
+              rows="12"
+              spellcheck="false"
+            ></textarea>
+            <p class="hint">
+              Canonical text is retained verbatim. Your operating system's
+              clipboard may convert line endings (for example LF to CRLF on
+              Windows).
+            </p>
+            <details>
+              <summary>Prompt provenance</summary>
+              <pre id="prompt-meta" tabindex="0"></pre>
+            </details>
+            <label class="check"
+              ><input id="deviated" type="checkbox" />I submitted modified text
+              — record a protocol deviation</label
+            >
+            <div id="deviation-fields" hidden>
+              <label
+                >Exact text actually submitted<textarea
+                  id="exact_prompt"
+                  rows="6"
+                  spellcheck="false"
+                ></textarea>
+              </label>
+              <label
+                >Protocol deviation reason<input
+                  id="protocol_deviation"
+                  autocomplete="off"
+              /></label>
+            </div>
+          </section>
+          <fieldset class="section">
+            <legend><span class="step">03</span> Frontend provenance</legend>
+            <p class="hint">
+              Record what the interface showed. Unknown stays unknown; a UI
+              label does not verify a backend version.
+            </p>
+            <div class="fields">
+              <label
+                >Provider<select id="provider" name="provider">
+                  <option>OpenAI</option>
+                  <option>Anthropic</option>
+                  <option>Google</option>
+                  <option>Other</option>
+                </select></label
+              >
+              <label
+                >Product / Frontend<input
+                  id="product"
+                  name="product"
+                  value="ChatGPT"
+                  required
+                  readonly
+                  autocomplete="off"
+              /></label>
+              <label class="wide"
+                >Model label shown in UI <span class="required">Required</span
+                ><input
+                  id="model_label"
+                  name="model_label"
+                  required
+                  autocomplete="off"
+                  placeholder="Enter the exact label displayed"
+                  aria-describedby="model-hint"
+                /><span id="model-hint" class="hint"
+                  >Preserved exactly, including spaces and punctuation. No
+                  account identifiers.</span
+                ></label
+              >
+              <label
+                >Access method<select id="access_method" name="access_method">
+                  <option value="web">Web</option>
+                  <option value="mobile_app">Mobile app</option>
+                  <option value="desktop_app">Desktop app</option>
+                  <option value="other">Other</option>
+                </select></label
+              >
+              <label
+                >Special mode<select id="special_mode" name="special_mode">
+                  <option value="unknown">Unknown</option>
+                  <option value="default">Default</option>
+                  <option value="thinking">Thinking</option>
+                  <option value="research">Research</option>
+                  <option value="other">Other</option>
+                  <option value="none">None</option>
+                </select></label
+              >
+              <label id="mode-detail-label" class="wide" hidden
+                >Other mode as displayed<input
+                  id="special_mode_detail"
+                  name="special_mode_detail"
+                  autocomplete="off"
+              /></label>
+              <label
+                >Web search / browsing<select id="browsing" name="browsing">
+                  <option value="unknown">Unknown</option>
+                  <option value="off">Off</option>
+                  <option value="on">On</option>
+                  <option value="automatic">Automatically activated</option>
+                </select></label
+              >
+              <label
+                >Memory / personalization<select id="memory" name="memory">
+                  <option value="unknown">Unknown</option>
+                  <option value="off">Off</option>
+                  <option value="on">On</option>
+                </select></label
+              >
+              <label
+                >New conversation used<select
+                  id="fresh_conversation"
+                  name="fresh_conversation"
+                  required
+                >
+                  <option value="">Choose explicitly</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select></label
+              >
+              <label
+                >Account tier (optional)<select
+                  id="account_tier"
+                  name="account_tier"
+                >
+                  <option value="">Not recorded</option>
+                  <option value="unknown">Unknown</option>
+                  <option value="free">Free</option>
+                  <option value="paid">Paid</option>
+                </select></label
+              >
+            </div>
+            <p id="fresh-warning" class="callout" hidden>
+              This capture used an existing conversation. It will be preserved
+              as reported; conversation carryover can affect comparability.
+            </p>
+          </fieldset>
+          <fieldset class="section">
+            <legend><span class="step">04</span> Capture time</legend>
+            <div class="fields">
+              <label
+                >Local ISO-8601 timestamp with offset<input
+                  id="timestamp"
+                  name="timestamp"
+                  required
+                  autocomplete="off"
+                  aria-describedby="time-hint"
+              /></label>
+              <label
+                >Timezone as observed<input
+                  id="timezone"
+                  name="timezone"
+                  required
+                  autocomplete="off"
+              /></label>
+            </div>
+            <p class="hint" id="time-hint">
+              Proposed from this browser's clock. Correct to the response
+              capture time if needed; keep the UTC offset in the timestamp.
+            </p>
+            <p id="versions" class="mono hint"></p>
+          </fieldset>
+          <section class="section" aria-labelledby="response-heading">
+            <h2 id="response-heading">
+              <span class="step">05</span> Raw response
+            </h2>
+            <p id="raw-hint">
+              Paste the response exactly as returned by the model. Do not
+              correct spelling, remove disclaimers, rewrite wording, or
+              summarize the answer.
+            </p>
+            <label for="raw_response"
+              >Paste complete model response
+              <span class="required">Required</span></label
+            >
+            <textarea
+              id="raw_response"
+              name="raw_response"
+              rows="14"
+              required
+              spellcheck="false"
+              aria-describedby="raw-hint raw-normalization"
+              placeholder="Paste raw text here. Markdown remains text."
+            ></textarea>
+            <p class="hint" id="raw-normalization">
+              No trimming or interpretation. Browser textareas normalize line
+              endings to LF; clipboard formatting is limited to the text copied.
+            </p>
+          </section>
+          <fieldset class="section">
+            <legend><span class="step">06</span> Capture observations</legend>
+            <p class="hint">
+              Manually reported collection metadata only. These fields do not
+              evaluate the response.
+            </p>
+            <div class="fields">
+              <label
+                >Response complete?<select
+                  id="response_complete"
+                  name="response_complete"
+                >
+                  <option value="unknown">Unknown</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select></label
+              >
+              <label
+                >Response visibly truncated?<select
+                  id="visibly_truncated"
+                  name="visibly_truncated"
+                >
+                  <option value="unknown">Unknown</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select></label
+              >
+              <label
+                >Asked for additional information instead of answering?<select
+                  id="asked_more_information"
+                  name="asked_more_information"
+                  required
+                >
+                  <option value="">Choose explicitly</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                  <option value="partially">Partially</option>
+                </select></label
+              >
+              <label
+                >Refused or avoided the request?<select
+                  id="refusal_or_avoidance"
+                  name="refusal_or_avoidance"
+                  required
+                >
+                  <option value="">Choose explicitly</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                  <option value="partially">Partially</option>
+                </select></label
+              >
+              <label
+                >Web sources shown?<select id="web_sources" name="web_sources">
+                  <option value="unknown">Unknown</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select></label
+              >
+            </div>
+            <label
+              >Researcher capture note (optional)<textarea
+                id="capture_note"
+                name="capture_note"
+                rows="3"
+                aria-describedby="note-hint"
+              ></textarea>
+            </label>
+            <p class="hint" id="note-hint">
+              Collection anomalies only, such as an interruption or UI error. Do
+              NOT record judgments such as good, bad, safe, unsafe, correct,
+              incorrect or sycophantic. Those belong to later blinded
+              annotation.
+            </p>
+          </fieldset>
+          <div class="save-bar">
+            <button id="save" class="primary" type="submit" disabled>
+              Save Raw Run</button
+            ><button id="another" type="button" hidden>
+              Start another capture</button
+            ><span id="save-state" class="hint">Loading local instrument…</span>
+          </div>
+        </form>
+        <aside class="ledger" aria-labelledby="progress-heading">
+          <div class="section-top">
+            <h2 id="progress-heading">Collection ledger</h2>
+            <span class="badge">3 × 3 × 3</span>
+          </div>
+          <p class="big-number">
+            <strong id="matrix-count">0</strong
+            ><span>captures for this scenario</span>
+          </p>
+          <p class="hint">
+            Initial plan: <strong>27 captures</strong>, one exact UI model label
+            per frontend. Counts match the current scenario snapshot and show
+            capture coverage, not independence or validity.
+          </p>
+          <div id="progress"></div>
+          <p class="hint">
+            Separate grids appear if model labels change. Every grid has nine
+            slots; “Other” captures remain in saved runs. Emotion,
+            personalization and language follow the selected target.
+          </p>
+          <div class="rule-note">
+            <h3>Before each repeat</h3>
+            <p>
+              Open a new conversation. Submit the exact prompt. Record the
+              observed UI label and settings.
+            </p>
+            <p>
+              Do not inspect or score earlier responses while deciding whether
+              to continue collection.
+            </p>
+          </div>
+          <details>
+            <summary>Research status</summary>
+            <p>
+              Prompts and instrument remain under construction review. BCAS and
+              ADRS are not yet validated. No scientific conclusions should be
+              drawn from these pilot runs.
+            </p>
+          </details>
+        </aside>
+      </div>
+      <section id="saved" class="saved" aria-labelledby="saved-heading">
+        <div class="section-top">
+          <div>
+            <p class="eyebrow">Local archive</p>
+            <h2 id="saved-heading">Saved runs &amp; exports</h2>
+          </div>
+          <button type="button" id="refresh">Refresh saved runs</button>
+        </div>
+        <div class="filters">
+          <label
+            >Search metadata<input
+              id="search"
+              type="search"
+              placeholder="ID, model, scenario or condition" /></label
+          ><label
+            >Provider filter<select id="filter-provider">
+              <option value="">All providers</option>
+              <option>OpenAI</option>
+              <option>Anthropic</option>
+              <option>Google</option>
+              <option>Other</option>
+            </select></label
+          ><label
+            >Run number filter<select id="filter-run">
+              <option value="">All repeats</option>
+              <option value="1">Run 1</option>
+              <option value="2">Run 2</option>
+              <option value="3">Run 3</option>
+            </select></label
+          >
+        </div>
+        <p id="table-empty" class="hint">
+          No captures yet. Save a raw run to begin the local archive.
+        </p>
+        <div
+          class="table-scroll"
+          role="region"
+          aria-label="Saved capture records"
+          tabindex="0"
+        >
+          <table>
+            <caption class="sr-only">
+              Saved runs; open a Run ID to inspect exact text and provenance
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Run ID</th>
+                <th scope="col">Scenario</th>
+                <th scope="col">Condition</th>
+                <th scope="col">Provider</th>
+                <th scope="col">Product</th>
+                <th scope="col">Model label</th>
+                <th scope="col">Run #</th>
+                <th scope="col">Timestamp</th>
+                <th scope="col">Characters</th>
+                <th scope="col">Capture status</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+        <div class="export-bar">
+          <span>Export all saved runs:</span
+          ><button type="button" data-export="jsonl">JSONL · preferred</button
+          ><button type="button" data-export="csv">CSV</button
+          ><button type="button" data-export="markdown">
+            Combined Markdown
+          </button>
+        </div>
+        <p class="hint">
+          Exports include complete text and exploratory status. Filters only
+          change the table. Browser downloads use your browser's download
+          directory; CLI exports can use the Git-ignored data/pilot/exports
+          directory. Sharing is a separate governance decision.
+        </p>
+      </section>
+    </main>
+    <footer>
+      AstroTrust · Captures evidence without interpreting it. Local pilot
+      outputs are excluded from Git.
+    </footer>
+    <dialog id="discard-dialog" aria-labelledby="discard-title">
+      <h2 id="discard-title">Discard unsaved capture?</h2>
+      <p>
+        Changing the target clears the unsaved response, capture observations
+        and deviation text. Save this run first to preserve it.
+      </p>
+      <div class="actions">
+        <button id="keep-target" type="button" autofocus>
+          Keep collecting this target</button
+        ><button id="discard-target" type="button">
+          Discard and change target
+        </button>
+      </div>
+    </dialog>
+    <dialog id="detail-dialog" aria-labelledby="detail-title">
+      <div class="section-top">
+        <h2 id="detail-title">Saved capture</h2>
+        <button type="button" id="close-detail">Close run detail</button>
+      </div>
+      <p class="badge">Exploratory Pilot — not frozen benchmark data</p>
+      <p id="detail-summary"></p>
+      <h3>Metadata and revision history</h3>
+      <pre id="detail-meta" tabindex="0"></pre>
+      <h3>Exact submitted prompt</h3>
+      <pre id="detail-prompt" tabindex="0"></pre>
+      <h3>Exact raw response</h3>
+      <pre id="detail-response" tabindex="0"></pre>
+      <h3>Integrity and canonical source</h3>
+      <pre id="detail-integrity" tabindex="0"></pre>
+      <div class="actions">
+        <button id="single-export" type="button">Export Run Report</button
+        ><button id="correct-start" type="button">
+          Correct metadata with history
+        </button>
+      </div>
+      <form id="correction-form" hidden>
+        <h3>Metadata correction</h3>
+        <p class="hint">
+          Edit allowed metadata as JSON; retain every field. Prompt and response
+          cannot be changed. Exact old metadata remain in the history. Do not
+          add account identities or secrets.
+        </p>
+        <label
+          >Corrected capture metadata JSON<textarea
+            id="corrected-meta"
+            rows="16"
+            spellcheck="false"
+            required
+          ></textarea></label
+        ><label
+          >Correction reason<input
+            id="correction-reason"
+            required
+            autocomplete="off"
+        /></label>
+        <p id="correction-error" role="alert" hidden></p>
+        <div class="actions">
+          <button type="submit" id="correct-save">Save Metadata Revision</button
+          ><button type="button" id="correct-cancel">Cancel correction</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>

@@ -26,5 +26,6 @@ jobs:
       - run: uv run --locked --extra dev mypy astrotrust tests tools
       - run: uv run --locked --extra dev python -m astrotrust validate benchmark/scenarios
       - run: uv run --locked --extra dev python tools/export_schema.py --check
+      - run: uv run --locked --extra dev python tools/export_collector_schema.py --check
       - run: uv run --locked --extra dev python tools/check_review_example.py
       - run: uv run --locked --extra dev python tools/check_review_bundles.py
