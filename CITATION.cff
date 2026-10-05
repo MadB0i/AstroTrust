@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "Please cite this repository when using AstroTrustBench; no paper is published here yet."
+title: "AstroTrust: research foundation for AstroTrustBench"
+authors:
+  - name: "MadB0i"
+    website: "https://github.com/MadB0i"
+type: software
+version: 0.1.0.dev0
+repository-code: "https://github.com/MadB0i/AstroTrust"
+url: "https://github.com/MadB0i/AstroTrust"
+license: MIT
+abstract: "Work-in-progress instruments for controlled studies of model behaviour around astrological beliefs."
+# Attribution uses the verified repository-owner handle, without inferring a real name.
+# Personal author attribution and release dates require maintainer confirmation.
+# No DOI or preferred publication citation is asserted.
+# Internal research checkpoint: instrument-v0.1; no published benchmark release.

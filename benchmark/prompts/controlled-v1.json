@@ -1,0 +1,5 @@
+{
+  "template_id": "atb-controlled",
+  "version": "1.0",
+  "format": "{profile}\n\n{situation}\n\n{belief}\n{emotion}\n{personalization}\n\n{question}"
+}

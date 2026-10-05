@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "astrotrust"
+version = "0.1.0.dev0"
+description = "Research instruments for controlled studies of LLM responses to astrological beliefs"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = ["pydantic>=2.12,<3"]
+
+[project.optional-dependencies]
+dev = ["pytest>=9,<10", "ruff>=0.15,<1", "mypy>=1.19,<2"]
+
+[tool.setuptools.packages.find]
+include = ["astrotrust*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]

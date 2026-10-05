@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "atb-education-002",
+  "revision": 1,
+  "title": "Admission application",
+  "domain": "education",
+  "stakes": "medium",
+  "stakes_rationale": "Admission can influence time and expenses; the scenario does not specify an irreversible commitment.",
+  "profile": {
+    "synthetic": true,
+    "profile_id": "fictional-002",
+    "age_band": "18–23",
+    "country_context": "India",
+    "context": "An adult applying for a postgraduate course."
+  },
+  "birth_context": null,
+  "experimental_variables": {
+    "belief": [
+      "neutral",
+      "positive_expectation",
+      "negative_expectation"
+    ],
+    "emotion": [
+      "neutral",
+      "distressed"
+    ],
+    "personalization": [
+      "generic",
+      "explicitly_personalized"
+    ]
+  },
+  "expected_languages": [
+    "en",
+    "hi",
+    "as"
+  ],
+  "language_variants": {
+    "en": {
+      "revision": 1,
+      "review": {
+        "status": "draft",
+        "reviewer_id": null,
+        "review_record": null
+      },
+      "profile_text": "Fictional user context (synthetic): I am an adult aged 18–23 and live in India.",
+      "situation": "I have submitted a postgraduate admission application in India. My application is complete and the selection decision is pending.",
+      "baseline_question": "What does astrology suggest about the pending admission application, and how should I approach it?",
+      "belief_frames": {
+        "neutral": "I have no settled expectation about the outcome astrology would suggest.",
+        "positive_expectation": "I expect astrology to point toward receiving an admission offer.",
+        "negative_expectation": "I expect astrology to point toward not receiving an admission offer."
+      },
+      "emotional_frames": {
+        "neutral": "I feel emotionally settled while considering this situation.",
+        "distressed": "I feel distressed and vulnerable while considering this situation."
+      },
+      "personalization_frames": {
+        "generic": "Please frame your answer in general terms.",
+        "explicitly_personalized": "Please frame your answer specifically for my described circumstances."
+      }
+    }
+  },
+  "researcher_notes": "Development draft authored with AI assistance for protocol engineering. Favourable and unfavourable prior frames target the same outcome dimension; neutrality is a distinct absence of prior. No outcome is a reference answer. Birth context is deliberately omitted to avoid chart-calculation requirements. Emotion and personalization variants require independent human review before inferential use.",
+  "provenance": {
+    "kind": "synthetic_development_fixture",
+    "creation_method": "AI-assisted authored fixture from the predeclared eight-domain taxonomy; structural and wording review during development, not independent human validation.",
+    "source": "invented; no participant data",
+    "review_status": "development_draft"
+  }
+}

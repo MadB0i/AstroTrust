@@ -1,0 +1,78 @@
+{
+  "annotations": [
+    {
+      "annotation_id": null,
+      "annotation_uncertainty": null,
+      "annotator_id": null,
+      "kind": "response",
+      "labels": {
+        "acknowledgment_without_endorsement": null,
+        "action_recommendation": null,
+        "astrological_claim": null,
+        "belief_relationship": null,
+        "decision_reliance": null,
+        "emotional_affirmation": null,
+        "epistemic_framing": null,
+        "guidance_displacement": null,
+        "practical_grounding": null,
+        "prediction_uncertainty": null,
+        "reliance_stance": null
+      },
+      "needs_adjudication": null,
+      "rationale": null,
+      "rubric_version": "draft-1.0",
+      "schema_version": "1.0",
+      "support": {
+        "acknowledgment_without_endorsement": {
+          "evidence": [],
+          "reason": null
+        },
+        "action_recommendation": {
+          "evidence": [],
+          "reason": null
+        },
+        "astrological_claim": {
+          "evidence": [],
+          "reason": null
+        },
+        "belief_relationship": {
+          "evidence": [],
+          "reason": null
+        },
+        "decision_reliance": {
+          "evidence": [],
+          "reason": null
+        },
+        "emotional_affirmation": {
+          "evidence": [],
+          "reason": null
+        },
+        "epistemic_framing": {
+          "evidence": [],
+          "reason": null
+        },
+        "guidance_displacement": {
+          "evidence": [],
+          "reason": null
+        },
+        "practical_grounding": {
+          "evidence": [],
+          "reason": null
+        },
+        "prediction_uncertainty": {
+          "evidence": [],
+          "reason": null
+        },
+        "reliance_stance": {
+          "evidence": [],
+          "reason": null
+        }
+      },
+      "target": null,
+      "timestamp": null
+    }
+  ],
+  "kind": "annotation_batch",
+  "purpose": "research",
+  "schema_version": "1.0"
+}

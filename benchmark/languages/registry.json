@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "languages": {
+    "en": {"name": "English", "status": "development_draft"},
+    "hi": {"name": "Hindi", "status": "translation_pending"},
+    "as": {"name": "Assamese", "status": "translation_pending"}
+  }
+}
