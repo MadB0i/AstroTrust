@@ -8,7 +8,7 @@ We now compare consumer apps against general-purpose web chatbots and an unmonet
 \caption{Tripartite cohort comparison ($N=49$ verified captures) with 95\% Wilson confidence intervals and exact two-sided Fisher tests.}
 \label{tab:tripartite}
 \footnotesize
-\begin{tabularx}{\textwidth}{@{}l X X X l@{}}
+\begin{tabularx}{\textwidth}{@{}L{3.15cm} Y Y Y L{3.05cm}@{}}
 \toprule
 \textbf{Evaluation Metric} & \textbf{Frontier LLMs ($N=27$)} & \textbf{Consumer Apps ($N=6$)} & \textbf{Local \texttt{Qwen2.5-0.5B} ($N=16$)} & \textbf{Exact Fisher Test} \\
 \midrule
@@ -29,18 +29,18 @@ Mean length (Min--Max chars) & 2,003.8 (717--3,284) & 637.5 (185--1,661) & 2,624
 \begin{axis}[
   ybar,
   width=\columnwidth,
-  height=5.3cm,
-  bar width=6.5pt,
-  ymin=0, ymax=115,
+  height=5.6cm,
+  bar width=6pt,
+  ymin=0, ymax=130,
   ylabel={\scriptsize Rate Across Runs (\%)},
   xtick={1,2,3,4},
-  xticklabels={Calibration, Instability, Cutoffs, Dark Patterns},
-  xticklabel style={font=\scriptsize},
+  xticklabels={Calibrated, Instability, Cutoffs, {Dark\\Patterns}},
+  xticklabel style={font=\scriptsize, align=center},
   yticklabel style={font=\scriptsize},
-  legend style={at={(0.5,1.03)}, anchor=south, legend columns=3, font=\scriptsize, draw=none},
+  legend style={at={(0.5,1.02)}, anchor=south, legend columns=3, font=\scriptsize, draw=none},
   nodes near coords,
   every node near coord/.append style={font=\tiny, rotate=90, anchor=west},
-  enlarge x limits=0.22,
+  enlarge x limits=0.18,
   grid=major,
   major grid style={dashed, gray!25},
   axis lines*=left
@@ -95,9 +95,9 @@ For Layer~1, we compare our deterministic baseline (\texttt{AstroGuard-Rules}) a
 \caption{In-domain exploratory evaluation of \texttt{AstroGuard-LoRA} ($N=10$ stratified validation split) vs.\ \texttt{AstroGuard-Rules}.}
 \label{tab:guard}
 \footnotesize
-\begin{tabularx}{\columnwidth}{@{}l c c c c@{}}
+\begin{tabularx}{\columnwidth}{@{}Y c c c c@{}}
 \toprule
-\textbf{Metric} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\textbf{Metric} & \textbf{Acc.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1} \\
 \midrule
 JSON schema parse validity & 10/10 (100\%) & --- & --- & --- \\
 ADRS reliance tier exact match & 8/10 (80\%) & --- & --- & --- \\

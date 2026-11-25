@@ -1,29 +1,18 @@
-# LaTeX Manuscript Source (`AstroTrust 2.0`)
+# Overleaf LaTeX Project (`AstroTrust 2.0`)
 
-This directory contains the self-contained LaTeX source for the working paper:
+This directory is pre-formatted for direct compilation in **Overleaf** using **`pdfLaTeX`** (standard TeX Live packages: `newtxtext`, `newtxmath`, `tabularx`, `booktabs`, `seqsplit`, `xurl`, `fancyhdr`, `tikz`, `pgfplots`, `natbib`, `balance`).
 
-*`Calibration Without Safety: Auditing Epistemic Reliance, Monetization Dark Patterns, and Installed-App Harvesting in AI Astrology Apps in India`*
+## Two Fastest Ways to Compile on Overleaf
 
-## Contents
+1. **Direct ZIP Upload:** Upload `D:\ASTRO\astrotrust_overleaf.zip` via **Overleaf $\rightarrow$ New Project $\rightarrow$ Upload Project** and click **Recompile**.
+2. **GitHub Import:** Connect Overleaf to `https://github.com/MadB0i/AstroTrust`, open `paper/`, set **Compiler = pdfLaTeX** and **Main document = `main.tex`**, and click **Recompile**.
 
-- [main.tex](main.tex) — Primary two-column driver document (uses standard TeX packages + vector `tikz`/`pgfplots` figures with zero external binary figure dependencies).
-- [sections/01_intro_related.tex](sections/01_intro_related.tex) — Abstract, Introduction, Proof Roadmap, and Related Work & Indian Regulatory Context.
-- [sections/02_benchmark_apps.tex](sections/02_benchmark_apps.tex) — AstroTrust 2.0 Protocol, Deviation Disclosures, and Consumer App Audit ($N=6$ live sessions).
-- [sections/03_apk_forensics.tex](sections/03_apk_forensics.tex) — Static APK Reverse Engineering, Pipeline TikZ Diagram, 787-App pgfplots Chart, and `Astrotalk` vs. `Pandit Ji` Natural Experiment.
-- [sections/04_eval_astroguard.tex](sections/04_eval_astroguard.tex) — Tripartite Comparative Evaluation ($N=49$), Fisher Exact Tests, `Qwen2.5-0.5B` Instability Analysis, and Dual-Layer `AstroGuard` Diagnostic.
-- [sections/05_discussion_appendix.tex](sections/05_discussion_appendix.tex) — Limitations, Policy Proposals, and SHA-256 Cryptographic Inventory.
-- [references.bib](references.bib) — Verified BibTeX bibliography.
+## Included Source Tree
 
-## Building Locally or on Overleaf
-
-Upload the entire `paper/` directory to Overleaf (with `pdflatex` compiler) or compile locally with:
-
-```powershell
-cd paper
-pdflatex main.tex
-bibtex main
-pdflatex main.tex
-pdflatex main.tex
-```
-
-All figures (`tikz` and `pgfplots`) and tables (`booktabs` / `tabularx`) render natively without extra downloads, and currency uses `INR~` for full `pdflatex` ASCII safety.
+- [main.tex](main.tex) — Primary two-column Overleaf manuscript with preprint header/footer, ragged-right `tabularx` column types, and clickable links.
+- [sections/01_intro_related.tex](sections/01_intro_related.tex) — Abstract, Introduction, Proof Table, and Indian Regulatory Context.
+- [sections/02_benchmark_apps.tex](sections/02_benchmark_apps.tex) — AstroTrust 2.0 Benchmark Protocol and Live Consumer Audit ($N=6$).
+- [sections/03_apk_forensics.tex](sections/03_apk_forensics.tex) — APK Forensics, Vector TikZ Pipeline (`fig:pipeline`), 787-App Bar Chart (`fig:taxonomy`), and Natural Experiment vs.\ `Pandit Ji`.
+- [sections/04_eval_astroguard.tex](sections/04_eval_astroguard.tex) — Tripartite Comparison ($N=49$), Fisher/Wilson Statistics, Dissociation Plot (`fig:dissociation`), `Qwen2.5-0.5B` Instability, and `AstroGuard` Diagnostics.
+- [sections/05_discussion_appendix.tex](sections/05_discussion_appendix.tex) — Limitations, India Policy Proposals, and Full 64-Character SHA-256 Table (`tab:hashes`).
+- [references.bib](references.bib) — 13 verified BibTeX entries (`plainnat` style).

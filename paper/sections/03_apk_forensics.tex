@@ -8,14 +8,14 @@ Live chat logs cannot show what an application reads off the handset in the back
 \caption{Static binary forensic summary across downloaded Indian astrology APKs.}
 \label{tab:apks}
 \footnotesize
-\begin{tabularx}{\textwidth}{@{}l l l r l c c X@{}}
+\begin{tabularx}{\textwidth}{@{}L{2.55cm} L{1.65cm} L{1.85cm} L{1.55cm} c c Y@{}}
 \toprule
-\textbf{APK File} & \textbf{Package ID} & \textbf{Version (Code)} & \textbf{Size (Files)} & \textbf{Stack} & \textbf{\texttt{<queries>} Pkgs} & \textbf{Unique} & \textbf{Key Manifest, Asset \& Backend Findings} \\
+\textbf{APK / Package ID} & \textbf{Version (Code)} & \textbf{Size (Files)} & \textbf{Stack} & \textbf{\texttt{<queries>}} & \textbf{Uniq.} & \textbf{Key Manifest, Asset \& Backend Findings} \\
 \midrule
-\texttt{Astrotalk.apk} & \texttt{com.astrotalk} & \texttt{1.1.545} (545) & 89.91~MB (7,825) & Native (7~DEX) & 823 & \textbf{804} & \texttt{QUERY\_ALL\_PACKAGES=False}; \texttt{apppackges.json} (\textbf{787/787} in \texttt{<queries>}); \texttt{ExternalPackageTracker} $\rightarrow$ \texttt{user/apps/installed} \\
-\texttt{Pandit Ji.apk} & \texttt{com.astrology.panditji} & \texttt{1.1.421} (421) & 97.03~MB (7,119) & Native (6~DEX) & 26 & 26 & 6,193 shared paths (86.99\%) \& 3,172 identical files vs.\ Astrotalk; 1,470 \texttt{astrotalk} DEX strings; zero tracker \\
-\texttt{Reva.apk} & \texttt{in.mohalla.reva} & \texttt{2026.24.2} (2026242) & 38.41~MB (1,500) & RN Hermes (5~DEX) & 83 & 83 & \texttt{DETECT\_SCREEN\_CAPTURE=True}; \texttt{/payments-api-gateway/v1/subscriptions/}; \texttt{revaastro.in} \\
-\texttt{AstroTime.apk} & \texttt{com.theastrotime} & \texttt{4.1.8} (47) & 25.76~MB (1,315) & RN Hermes (2~DEX) & 9 & 9 & Independent RN codebase (\texttt{apis.theastrotime.com}, \texttt{posthog.theastrotime.com}, \texttt{livekit.io}) \\
+\texttt{Astrotalk.apk} \texttt{com.astrotalk} & \texttt{1.1.545} (545) & 89.91~MB (7,825) & Native (7~DEX) & 823 & \textbf{804} & \texttt{QUERY\_ALL\_PACKAGES=False}; \texttt{apppackges.json} (\textbf{787/787} in \texttt{<queries>}); \texttt{ExternalPackageTracker} $\rightarrow$ \texttt{user/apps/installed} \\
+\texttt{Pandit Ji.apk} \texttt{com.astrology.panditji} & \texttt{1.1.421} (421) & 97.03~MB (7,119) & Native (6~DEX) & 26 & 26 & 6,193 shared paths (86.99\%) \& 3,172 identical files vs.\ Astrotalk; 1,470 \texttt{astrotalk} DEX strings; zero tracker \\
+\texttt{Reva.apk} \texttt{in.mohalla.reva} & \texttt{2026.24.2} (2026242) & 38.41~MB (1,500) & RN Hermes (5~DEX) & 83 & 83 & \texttt{DETECT\_SCREEN\_CAPTURE=True}; \texttt{/payments-api-gateway/v1/subscriptions/}; \texttt{revaastro.in} \\
+\texttt{AstroTime.apk} \texttt{com.theastrotime} & \texttt{4.1.8} (47) & 25.76~MB (1,315) & RN Hermes (2~DEX) & 9 & 9 & Independent RN codebase (\texttt{apis.theastrotime.com}, \texttt{posthog.theastrotime.com}, \texttt{livekit.io}) \\
 \bottomrule
 \end{tabularx}
 \end{table*}
@@ -31,9 +31,9 @@ All 17 remaining entries in $\mathcal{Q}_{\mathrm{AT}} \setminus \mathcal{P}_{\m
 
 Bytecode inspection of \texttt{classes3.dex} traces the execution pipeline cleanly despite R8 class minification (\texttt{Lcom/astrotalk/utils/u0;} retaining debug source \texttt{ExternalPackageTracker.kt}):
 \begin{enumerate}[leftmargin=*,itemsep=2pt,topsep=3pt]
-\item \textbf{Trigger:} \texttt{AuthViewModel\$checkExternalPackages\$1} calls \texttt{AuthRepositoryImpl\$checkExternalPackages\$2}, invoking \texttt{ExternalPackageTracker\$trackIfNeeded\$1}.
-\item \textbf{Cooldown \& Enumeration:} The tracker checks a \texttt{SharedPreferences} flag (\texttt{"execute\_24h\_check"}), reads \texttt{assets/apppackges.json}, calls \texttt{PackageManager.getInstalledPackages()}, and populates \texttt{com.astrotalk.models.externalPackage.App} objects inside \texttt{getInstalledTrackedApps\$1} and \texttt{trackInstalledPackages\$1}/\texttt{\$3}.
-\item \textbf{Exfiltration Endpoints:} Retrofit service interface \texttt{com.astrotalk.controller.b} uploads detected packages via \texttt{S3} (\texttt{@POST("user/apps/installed")} carrying \texttt{@Header("id")}, \texttt{@Header("Authorization")}, \texttt{@Query("device\_id")}, and \texttt{@Body List}), alongside companion method \texttt{O1} (\texttt{@POST("/AstrotalkPayments/user/save/user-upi-apps")} via \texttt{PostSaveUserUpiInstalledAppsRequestDto}).
+\item \textbf{Trigger:} \texttt{AuthViewModel\$\allowbreak checkExternalPackages\$1} calls \texttt{AuthRepositoryImpl\$\allowbreak checkExternalPackages\$2}, invoking \texttt{ExternalPackageTracker\$\allowbreak trackIfNeeded\$1}.
+\item \textbf{Cooldown \& Enumeration:} The tracker checks a \texttt{SharedPreferences} flag (\texttt{"execute\_24h\_check"}), reads \texttt{assets/apppackges.json}, calls \texttt{PackageManager.\allowbreak getInstalledPackages()}, and populates \texttt{com.astrotalk.\allowbreak models.\allowbreak externalPackage.App} objects inside \texttt{getInstalledTrackedApps\$1} and \texttt{trackInstalledPackages\$1}/\texttt{\$3}.
+\item \textbf{Exfiltration Endpoints:} Retrofit service interface \texttt{com.astrotalk.controller.b} uploads detected packages via \texttt{S3} (\texttt{@POST("user/apps/installed")} carrying \texttt{@Header("id")}, \texttt{@Header("Authorization")}, \texttt{@Query("device\_id")}, and \texttt{@Body List}), alongside companion method \texttt{O1} (\texttt{@POST("/AstrotalkPayments/user/save/user-upi-apps")} via \texttt{\seqsplit{PostSaveUserUpiInstalledAppsRequestDto}}).
 \end{enumerate}
 
 \begin{figure}[t]
@@ -70,9 +70,9 @@ Classifying all 787 entries cleanly shows what kind of user state \texttt{Astrot
 \begin{tikzpicture}
 \begin{axis}[
   xbar,
-  width=0.86\textwidth,
+  width=0.66\textwidth,
   height=7.4cm,
-  bar width=6.5pt,
+  bar width=7pt,
   enlarge y limits=0.05,
   xlabel={\footnotesize Targeted Package Count inside \texttt{Astrotalk} \texttt{assets/apppackges.json} ($N=787$)},
   ytick={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},
@@ -99,7 +99,7 @@ Classifying all 787 entries cleanly shows what kind of user state \texttt{Astrot
   nodes near coords,
   nodes near coords align={horizontal},
   every node near coord/.append style={font=\tiny},
-  xmin=0, xmax=215,
+  xmin=0, xmax=225,
   grid=major,
   major grid style={dashed, gray!25},
   axis lines*=left
@@ -129,7 +129,7 @@ Classifying all 787 entries cleanly shows what kind of user state \texttt{Astrot
 \end{figure*}
 
 \subsection{Natural Experiment: \texttt{Astrotalk} vs.\ \texttt{Pandit Ji}}
-Could \texttt{ExternalPackageTracker} simply be forgotten analytics boilerplate? Comparing \texttt{Astrotalk.apk} directly against its sister app \texttt{Pandit Ji.apk} (\texttt{v1.1.421}) settles that question. Across 7,119 ZIP entries in \texttt{Pandit Ji}, \textbf{6,193 file paths (86.99\%)} overlap with \texttt{Astrotalk}, and \textbf{3,172 files (44.56\%)} have identical uncompressed size and CRC32 checksums. \texttt{Pandit Ji}'s DEX files still contain 1,470 occurrences of the substring \texttt{astrotalk}--spanning live URLs like \texttt{https://api.astromall.astrotalk.com/AstroMall/}, \texttt{http://api.kundali.astrotalk.com/v1/}, \texttt{https://api-kundlireport.astrotalk.in/}, and deep link \texttt{astrotalk://epooja}--alongside \texttt{com.panditji.featureAstroBuddy} DTO classes mirroring \texttt{Astrotalk}'s \texttt{api-astrobuddy.astrotalk.in}. Yet \texttt{Pandit Ji} contains zero \texttt{assets/apppackges.json}, zero \texttt{ExternalPackageTracker}, zero \texttt{user/apps/installed} route, and only \textbf{26 standard \texttt{<queries>} entries} (UPI PSPs, social sharing, OTPLess, Maps, Chrome). That contrast proves \texttt{Astrotalk}'s 787-app profiler was selectively added and synchronized for the flagship client.
+Could \texttt{ExternalPackageTracker} simply be forgotten analytics boilerplate? Comparing \texttt{Astrotalk.apk} directly against its sister app \texttt{Pandit Ji.apk} (\texttt{v1.1.421}) settles that question. Across 7,119 ZIP entries in \texttt{Pandit Ji}, \textbf{6,193 file paths (86.99\%)} overlap with \texttt{Astrotalk}, and \textbf{3,172 files (44.56\%)} have identical uncompressed size and CRC32 checksums. \texttt{Pandit Ji}'s DEX files still contain 1,470 occurrences of the substring \texttt{astrotalk}--spanning live URLs like \url{https://api.astromall.astrotalk.com/AstroMall/}, \url{http://api.kundali.astrotalk.com/v1/}, \url{https://api-kundlireport.astrotalk.in/}, and deep link \texttt{astrotalk://epooja}--alongside \texttt{\seqsplit{com.panditji.featureAstroBuddy}} DTO classes mirroring \texttt{Astrotalk}'s \url{https://api-astrobuddy.astrotalk.in/}. Yet \texttt{Pandit Ji} contains zero \texttt{assets/apppackges.json}, zero \texttt{ExternalPackageTracker}, zero \texttt{user/apps/installed} route, and only \textbf{26 standard \texttt{<queries>} entries} (UPI PSPs, social sharing, OTPLess, Maps, Chrome). That contrast proves \texttt{Astrotalk}'s 787-app profiler was selectively added and synchronized for the flagship client.
 
 \paragraph{Note on \texttt{Reva} and \texttt{AstroTime} APKs.}
 Neither React Native Hermes APK bundles an installed-app harvester (\texttt{Reva}: 83 standard payment/social queries; \texttt{AstroTime}: 9 queries). However, \texttt{Reva.apk} requests Android~14's \texttt{DETECT\_SCREEN\_CAPTURE} permission alongside ShareChat subscription endpoints (\texttt{/payments-api-gateway/v1/subscriptions/}, \texttt{revaastro.in}), while \texttt{AstroTime} runs analytics and real-time voice infrastructure over \texttt{apis.theastrotime.com}, \texttt{posthog.theastrotime.com}, and \texttt{cloud-api.livekit.io}.
