@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "astrotrust"
 version = "0.1.0.dev0"
-description = "Research instruments for controlled studies of LLM responses to astrological beliefs"
+description = "Research instruments for evaluating AI advice around astrology-related beliefs"
 readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
@@ -38,5 +38,5 @@ strict = true
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["playwright.*"]
+module = ["playwright.*", "torch.*", "transformers.*", "peft.*", "datasets.*"]
 ignore_missing_imports = true

@@ -1,6 +1,12 @@
-# Future analysis
+# Analysis workflow
 
-No estimates, figures or findings exist. Define contrasts, aggregation units,
+No scientific estimates, figures or findings are claimed. The implemented
+[capture summary](../docs/response-analysis.md) verifies hash-linked sidecar labels
+and reports descriptive category counts by exact source and evaluator. With no
+annotations it emits no scores. It does not rewrite evidence or calculate validated
+BCAS/ADRS, rank models, infer user behavior or produce automatic reference labels.
+
+Define contrasts, aggregation units,
 uncertainty methods, exclusions, failure handling and multiple-comparison policy
 before interpreting model runs. Account for repeated conditions/replicates nested
 within scenarios; prompts are not independent population samples.

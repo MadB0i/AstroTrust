@@ -17,3 +17,5 @@ analysis/outputs/
 reviews/private/
 reviews/submissions/
 reviews/generated/
+
+data/astroguard/*.jsonl

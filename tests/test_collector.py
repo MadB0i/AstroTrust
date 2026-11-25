@@ -443,3 +443,129 @@ def test_loopback_security_and_http_capture(server: CollectorServer) -> None:
     assert http(server, "/api/runs", body='{"metadata":{},"metadata":{}}')[0] == 400
     _, exported = http(server, "/api/export?format=jsonl")
     assert load_jsonl(exported) == (run,)
+
+
+def test_complete_general_matrix_and_consumer_separation(server: CollectorServer) -> None:
+    from test_consumer_collector import request as consumer_request
+
+    from astrotrust.collector.consumer_models import ConsumerRequest
+    from astrotrust.collector.consumer_store import ConsumerStore
+
+    c = server.collector
+    for provider, product in (("OpenAI", "ChatGPT"), ("Anthropic", "Claude"), ("Google", "Gemini")):
+        for condition in belief_conditions():
+            prompt = c.prompt("atb-career-001", condition)
+            for number in (1, 2, 3):
+                c.save(
+                    request(
+                        c,
+                        condition=condition,
+                        exact_prompt=prompt.messages[0].content,
+                        canonical_prompt_sha256=digest(prompt.messages[0].content),
+                        metadata=metadata(provider=provider, product=product, run_number=number),
+                    )
+                )
+    originals = c.store.all()
+    original_bytes = c.store.path.read_bytes()
+    original_exports = jsonl(originals), csv_export(originals), markdown_report(originals)
+    before = progress(originals, "atb-career-001", Condition())
+    assert before["captured"] == 27
+    payload = consumer_request().model_dump_json()
+    code, body = http(server, "/api/consumer/runs", body=payload)
+    assert code == 201
+    consumer = json.loads(body)["run"]
+    assert consumer["source_category"] == "consumer_astrology_service"
+    assert http(server, "/api/consumer/runs", body=payload)[0] == 409
+    assert http(server, "/api/runs", body=payload)[0] == 400
+    assert http(server, "/api/consumer/runs", body=request(c).model_dump_json())[0] == 400
+    assert http(server, "/api/consumer/bootstrap", authorized=False)[0] == 403
+    assert (
+        http(server, "/api/consumer/runs", body=payload, origin="https://foreign.example")[0] == 403
+    )
+    assert http(server, "/consumer")[0] == 200
+    assert http(server, "/consumer.js")[0] == 200
+    assert http(server, "/api/run?id=" + consumer["run_id"])[0] == 400
+    assert http(server, "/api/consumer/run?id=" + originals[0].run_id)[0] == 400
+    assert c.store.path.read_bytes() == original_bytes
+    assert c.store.all() == originals
+    assert (
+        jsonl(c.store.all()),
+        csv_export(c.store.all()),
+        markdown_report(c.store.all()),
+    ) == original_exports
+    assert progress(c.store.all(), "atb-career-001", Condition()) == before
+    # Existing reserved metadata never gives a consumer record a matrix slot.
+    legacy = ManualRun.model_validate(
+        originals[0].model_dump()
+        | {
+            "metadata": originals[0].metadata.model_dump()
+            | {"source_category": "consumer_astrology_service"},
+            "history": [
+                originals[0].history[0].model_dump()
+                | {
+                    "metadata": originals[0].metadata.model_dump()
+                    | {"source_category": "consumer_astrology_service"},
+                }
+            ],
+        }
+    )
+    assert progress((legacy,), "atb-career-001", Condition())["captured"] == 0
+    with pytest.raises(ValueError, match="separate consumer"):
+        c.save(request(c, metadata=legacy.metadata))
+    assert server.consumer is not None
+    assert ConsumerStore(server.consumer.store.path).all()[0].prompt_id == "consumer-career-p1"
+    assert ConsumerRequest.model_validate_json(payload).prompt_id == "consumer-career-p1"
+
+
+def test_consumer_startup_does_not_open_general_database(tmp_path: Path) -> None:
+    general = tmp_path / "general.sqlite3"
+    consumer = tmp_path / "consumer.sqlite3"
+    with make_server(ROOT, general, 0, consumer_database=consumer, start_consumer=True) as instance:
+        thread = Thread(target=instance.serve_forever, daemon=True)
+        thread.start()
+        try:
+            assert http(instance, "/consumer")[0] == 200
+            assert http(instance, "/api/consumer/bootstrap")[0] == 200
+            assert not general.exists()
+            assert consumer.exists()
+        finally:
+            instance.shutdown()
+            thread.join()
+    with pytest.raises(ValueError, match="separate"):
+        make_server(ROOT, consumer, 0, consumer_database=consumer)
+
+
+def test_consumer_profile_api_requires_explicit_provenance(server: CollectorServer) -> None:
+    from test_consumer_collector import request as consumer_request
+
+    from astrotrust.collector.consumer_profiles import PROFILES, profile_digest
+
+    code, bootstrap = http(server, "/api/consumer/bootstrap")
+    registry = json.loads(bootstrap)
+    assert code == 200 and registry["schema_version"] == "consumer-1.1"
+    assert registry["profiles"][0]["snapshot"] == PROFILES["consumer-profile-001"].model_dump(
+        mode="json"
+    )
+    assert registry["profiles"][0]["sha256"] == profile_digest(PROFILES["consumer-profile-001"])
+    payload = consumer_request().model_dump(mode="json")
+    for field in ("profile_id", "profile_fields_submitted", "interaction_mode"):
+        incomplete = payload.copy()
+        del incomplete[field]
+        assert http(server, "/api/consumer/runs", body=json.dumps(incomplete))[0] == 400
+    custom = payload | {"profile_snapshot": {"date_of_birth": "2000-01-01"}}
+    assert http(server, "/api/consumer/runs", body=json.dumps(custom))[0] == 400
+    assert server.consumer is not None and server.consumer.store.all() == ()
+    code, saved = http(server, "/api/consumer/runs", body=json.dumps(payload))
+    assert code == 201
+    run = json.loads(saved)["run"]
+    attempt = {
+        "expected_revision": 1,
+        "reason": "Synthetic forbidden evidence correction",
+        "metadata": run["metadata"],
+        "profile_id": "not_used",
+    }
+    assert (
+        http(server, "/api/consumer/correction?id=" + run["run_id"], body=json.dumps(attempt))[0]
+        == 400
+    )
+    assert len(server.consumer.store.get(run["run_id"]).history) == 1

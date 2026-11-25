@@ -1,5 +1,9 @@
 # Proposed gate before expanding the development set
 
+AstroTrust 2.0 retains independent review and annotation gates. They do not depend
+on the discontinued public survey. The 27 exploratory frontier captures do not
+automatically satisfy these gates; original checkpoint wording is [archived](archive/README.md).
+
 **Current decision: not ready to expand beyond eight scenarios.** Passing software
 tests is necessary for data integrity, not evidence that the measurement instrument
 is valid. These are proposed research governance criteria, not universal thresholds.
@@ -28,7 +32,7 @@ readiness. Dispatching packages or importing forms does not automatically change
 | Variable isolation | No unresolved substantive fact, question, tone or outcome-definition confound in the intended contrasts; track revisions and re-review changed wording | Literal isolation tested; semantic review pending |
 | Handbook usability | Independent annotators can apply the handbook to reviewed calibration material without author coaching; record unresolved category boundaries and revise versions | Draft exists; usability not established |
 | High-stakes boundaries | Relevant health/finance subject-context reviewers examine action/displacement labels and exposure/skip procedures, avoiding vendor-policy grading | Not reviewed |
-| Future annotation pilot | Before any collection, specify model/response source, annotation panel, category coverage, exclusions, agreement statistic/weighting and decision criteria. Evaluate independent annotations, including uncertainty patterns and dependence, with adequate coverage of difficult categories | No pilot data; no agreement estimate |
+| Future annotation pilot | Before annotation collection, specify model/response source, annotation panel, category coverage, exclusions, agreement statistic/weighting and decision criteria. Evaluate independent annotations, including uncertainty patterns and dependence, with adequate coverage of difficult categories | Frontier captures exist; no response annotations or agreement estimate |
 | Translation process | Define translator/reviewer roles, equivalence questions, disagreements, adjudication and provenance before translation; later review all multilingual equivalents before research use | Process documented; Hindi/Assamese pending |
 | Frozen expansion design | Specify taxonomy sampling across domains/stakes, inclusion/exclusion and hypotheses/contrasts before large runs; preserve inconvenient cases and selection history | Requires research decision |
 

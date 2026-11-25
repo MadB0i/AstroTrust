@@ -1,0 +1,765 @@
+{
+  "$defs": {
+    "ConsumerCorrection": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_revision": {
+          "minimum": 1,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "metadata": {
+          "$ref": "#/$defs/ConsumerMetadata"
+        },
+        "reason": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "expected_revision",
+        "reason",
+        "metadata"
+      ],
+      "title": "ConsumerCorrection",
+      "type": "object"
+    },
+    "ConsumerMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "access_method": {
+          "enum": [
+            "web",
+            "iOS",
+            "Android",
+            "desktop",
+            "other"
+          ],
+          "title": "Access Method",
+          "type": "string"
+        },
+        "ai_generated_claimed": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ],
+          "title": "Ai Generated Claimed",
+          "type": "string"
+        },
+        "asked_more_information": {
+          "enum": [
+            "yes",
+            "no",
+            "partially"
+          ],
+          "title": "Asked More Information",
+          "type": "string"
+        },
+        "capture_note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Capture Note"
+        },
+        "cost": {
+          "enum": [
+            "free",
+            "free_trial",
+            "paid",
+            "unknown"
+          ],
+          "title": "Cost",
+          "type": "string"
+        },
+        "human_involvement_claimed": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ],
+          "title": "Human Involvement Claimed",
+          "type": "string"
+        },
+        "observed_model_label": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Model Label"
+        },
+        "personal_fields_requested": {
+          "items": {
+            "enum": [
+              "DOB",
+              "date of birth",
+              "birth date",
+              "birth time",
+              "time of birth",
+              "birthplace",
+              "place of birth",
+              "gender",
+              "sex",
+              "name",
+              "current location",
+              "zodiac sign",
+              "relationship status",
+              "occupation",
+              "email",
+              "phone number"
+            ],
+            "type": "string"
+          },
+          "title": "Personal Fields Requested",
+          "type": "array"
+        },
+        "refusal_or_avoidance": {
+          "enum": [
+            "yes",
+            "no",
+            "partially"
+          ],
+          "title": "Refusal Or Avoidance",
+          "type": "string"
+        },
+        "repeat_identity": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Repeat Identity"
+        },
+        "response_complete": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ],
+          "title": "Response Complete",
+          "type": "string"
+        },
+        "response_type": {
+          "enum": [
+            "chat",
+            "generated_report",
+            "horoscope",
+            "other",
+            "unknown"
+          ],
+          "title": "Response Type",
+          "type": "string"
+        },
+        "run_number": {
+          "minimum": 1,
+          "title": "Run Number",
+          "type": "integer"
+        },
+        "service_name": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Service Name",
+          "type": "string"
+        },
+        "source_category": {
+          "const": "consumer_astrology_service",
+          "title": "Source Category",
+          "type": "string"
+        },
+        "timestamp": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Timestamp",
+          "type": "string"
+        },
+        "timezone": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Timezone",
+          "type": "string"
+        },
+        "visibly_truncated": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ],
+          "title": "Visibly Truncated",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_category",
+        "service_name",
+        "access_method",
+        "cost",
+        "ai_generated_claimed",
+        "human_involvement_claimed",
+        "response_type",
+        "personal_fields_requested",
+        "run_number",
+        "timestamp",
+        "timezone",
+        "response_complete",
+        "visibly_truncated",
+        "asked_more_information",
+        "refusal_or_avoidance"
+      ],
+      "title": "ConsumerMetadata",
+      "type": "object"
+    },
+    "ConsumerRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "exact_interaction": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Exact Interaction"
+        },
+        "exact_prompt": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Exact Prompt",
+          "type": "string"
+        },
+        "gender_required": {
+          "title": "Gender Required",
+          "type": "boolean"
+        },
+        "interaction_mode": {
+          "enum": [
+            "initial_prompt_only",
+            "prompt_and_fixed_profile_only",
+            "multi_step",
+            "unknown"
+          ],
+          "title": "Interaction Mode",
+          "type": "string"
+        },
+        "interaction_record_type": {
+          "enum": [
+            "not_applicable",
+            "protocol_note",
+            "transcript"
+          ],
+          "title": "Interaction Record Type",
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/$defs/ConsumerMetadata"
+        },
+        "profile_fields_submitted": {
+          "items": {
+            "enum": [
+              "date_of_birth",
+              "birth_time",
+              "birthplace",
+              "timezone",
+              "gender"
+            ],
+            "type": "string"
+          },
+          "title": "Profile Fields Submitted",
+          "type": "array"
+        },
+        "profile_id": {
+          "enum": [
+            "consumer-profile-001",
+            "not_used"
+          ],
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "profile_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Profile Sha256"
+        },
+        "profile_version": {
+          "anyOf": [
+            {
+              "const": "consumer-profile-1.0",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Profile Version"
+        },
+        "prompt_id": {
+          "enum": [
+            "consumer-career-p1",
+            "consumer-career-p2"
+          ],
+          "title": "Prompt Id",
+          "type": "string"
+        },
+        "protocol_deviation": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Protocol Deviation"
+        },
+        "raw_response": {
+          "title": "Raw Response",
+          "type": "string"
+        },
+        "registry_prompt_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Registry Prompt Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile_id",
+        "profile_version",
+        "profile_sha256",
+        "profile_fields_submitted",
+        "gender_required",
+        "interaction_mode",
+        "interaction_record_type",
+        "exact_interaction",
+        "prompt_id",
+        "registry_prompt_sha256",
+        "exact_prompt",
+        "raw_response",
+        "metadata"
+      ],
+      "title": "ConsumerRequest",
+      "type": "object"
+    },
+    "ConsumerRevision": {
+      "additionalProperties": false,
+      "properties": {
+        "metadata": {
+          "$ref": "#/$defs/ConsumerMetadata"
+        },
+        "reason": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Reason",
+          "type": "string"
+        },
+        "recorded_at": {
+          "format": "date-time",
+          "title": "Recorded At",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "revision",
+        "recorded_at",
+        "reason",
+        "metadata"
+      ],
+      "title": "ConsumerRevision",
+      "type": "object"
+    },
+    "ConsumerRun": {
+      "additionalProperties": false,
+      "properties": {
+        "code_revision": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Code Revision"
+        },
+        "code_worktree_dirty": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Code Worktree Dirty"
+        },
+        "collector_version": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Collector Version",
+          "type": "string"
+        },
+        "exact_interaction": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Exact Interaction"
+        },
+        "exact_prompt": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Exact Prompt",
+          "type": "string"
+        },
+        "gender_required": {
+          "title": "Gender Required",
+          "type": "boolean"
+        },
+        "history": {
+          "items": {
+            "$ref": "#/$defs/ConsumerRevision"
+          },
+          "minItems": 1,
+          "title": "History",
+          "type": "array"
+        },
+        "interaction_mode": {
+          "enum": [
+            "initial_prompt_only",
+            "prompt_and_fixed_profile_only",
+            "multi_step",
+            "unknown"
+          ],
+          "title": "Interaction Mode",
+          "type": "string"
+        },
+        "interaction_record_type": {
+          "enum": [
+            "not_applicable",
+            "protocol_note",
+            "transcript"
+          ],
+          "title": "Interaction Record Type",
+          "type": "string"
+        },
+        "interaction_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Interaction Sha256"
+        },
+        "kind": {
+          "const": "consumer_astrology_capture",
+          "title": "Kind",
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/$defs/ConsumerMetadata"
+        },
+        "profile_fields_submitted": {
+          "items": {
+            "enum": [
+              "date_of_birth",
+              "birth_time",
+              "birthplace",
+              "timezone",
+              "gender"
+            ],
+            "type": "string"
+          },
+          "title": "Profile Fields Submitted",
+          "type": "array"
+        },
+        "profile_id": {
+          "enum": [
+            "consumer-profile-001",
+            "not_used"
+          ],
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "profile_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Profile Sha256"
+        },
+        "profile_snapshot": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SyntheticProfile"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "profile_version": {
+          "anyOf": [
+            {
+              "const": "consumer-profile-1.0",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Profile Version"
+        },
+        "prompt_id": {
+          "enum": [
+            "consumer-career-p1",
+            "consumer-career-p2"
+          ],
+          "title": "Prompt Id",
+          "type": "string"
+        },
+        "prompt_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Prompt Sha256",
+          "type": "string"
+        },
+        "protocol_deviation": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Protocol Deviation"
+        },
+        "raw_response": {
+          "title": "Raw Response",
+          "type": "string"
+        },
+        "registry_prompt": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Registry Prompt",
+          "type": "string"
+        },
+        "registry_prompt_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Registry Prompt Sha256",
+          "type": "string"
+        },
+        "registry_version": {
+          "const": "consumer-career-1.0",
+          "title": "Registry Version",
+          "type": "string"
+        },
+        "research_status": {
+          "const": "Exploratory Pilot — NOT FROZEN BENCHMARK DATA. Prompts/instrument remain under construction review. BCAS and ADRS are not yet validated. No scientific conclusions should be drawn from these pilot runs.",
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Research Status",
+          "type": "string"
+        },
+        "response_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Response Sha256",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^consumer-[0-9a-f]{32}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "consumer-1.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "software_version": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Software Version",
+          "type": "string"
+        },
+        "source_category": {
+          "const": "consumer_astrology_service",
+          "title": "Source Category",
+          "type": "string"
+        },
+        "study_phase": {
+          "const": "exploratory_pilot",
+          "title": "Study Phase",
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile_id",
+        "profile_version",
+        "profile_sha256",
+        "profile_fields_submitted",
+        "gender_required",
+        "interaction_mode",
+        "interaction_record_type",
+        "exact_interaction",
+        "kind",
+        "schema_version",
+        "source_category",
+        "study_phase",
+        "research_status",
+        "run_id",
+        "prompt_id",
+        "registry_version",
+        "registry_prompt",
+        "registry_prompt_sha256",
+        "exact_prompt",
+        "prompt_sha256",
+        "protocol_deviation",
+        "raw_response",
+        "response_sha256",
+        "profile_snapshot",
+        "interaction_sha256",
+        "metadata",
+        "history",
+        "collector_version",
+        "software_version",
+        "code_revision",
+        "code_worktree_dirty"
+      ],
+      "title": "ConsumerRun",
+      "type": "object"
+    },
+    "SyntheticProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "birth_time": {
+          "const": "10:30",
+          "title": "Birth Time",
+          "type": "string"
+        },
+        "birthplace": {
+          "const": "Guwahati, Assam, India",
+          "title": "Birthplace",
+          "type": "string"
+        },
+        "date_of_birth": {
+          "const": "1998-02-12",
+          "title": "Date Of Birth",
+          "type": "string"
+        },
+        "gender": {
+          "const": "male",
+          "title": "Gender",
+          "type": "string"
+        },
+        "gender_use": {
+          "const": "only_when_service_requires_gender",
+          "title": "Gender Use",
+          "type": "string"
+        },
+        "profile_id": {
+          "const": "consumer-profile-001",
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "profile_version": {
+          "const": "consumer-profile-1.0",
+          "title": "Profile Version",
+          "type": "string"
+        },
+        "research_input_label": {
+          "const": "FICTIONAL / SYNTHETIC RESEARCH INPUT — NOT PARTICIPANT DATA",
+          "title": "Research Input Label",
+          "type": "string"
+        },
+        "timezone": {
+          "const": "Asia/Kolkata",
+          "title": "Timezone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile_id",
+        "profile_version",
+        "research_input_label",
+        "date_of_birth",
+        "birth_time",
+        "birthplace",
+        "timezone",
+        "gender",
+        "gender_use"
+      ],
+      "title": "SyntheticProfile",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/ConsumerRun"
+    },
+    {
+      "$ref": "#/$defs/ConsumerRequest"
+    },
+    {
+      "$ref": "#/$defs/ConsumerCorrection"
+    }
+  ],
+  "title": "AstroTrust consumer astrology capture, consumer-1.1"
+}

@@ -9,6 +9,7 @@ import sqlite3
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib.resources import files
 from pathlib import Path
+from threading import Lock
 from typing import cast
 from urllib.parse import parse_qs, urlsplit
 
@@ -17,11 +18,23 @@ from pydantic import ValidationError
 from astrotrust.annotations.models import condition_id
 from astrotrust.benchmark.models import Condition
 from astrotrust.benchmark.prompts import digest
-from astrotrust.collector import COLLECTOR_VERSION, INSTRUMENT_VERSION
+from astrotrust.collector import COLLECTOR_VERSION, INSTRUMENT_VERSION, consumer_exports
+from astrotrust.collector.consumer_models import (
+    PERSONAL_FIELDS,
+    PROMPTS,
+    REGISTRY_VERSION,
+    ConsumerCorrection,
+    ConsumerRequest,
+)
+from astrotrust.collector.consumer_profiles import PROFILE_FIELDS, PROFILES, profile_digest
+from astrotrust.collector.consumer_service import ConsumerCollector
+from astrotrust.collector.consumer_service import summary as consumer_summary
+from astrotrust.collector.consumer_store import DEFAULT_CONSUMER_DATABASE, ConsumerStore
 from astrotrust.collector.exports import ExportFormat, export, parse_json, single_report
 from astrotrust.collector.models import CaptureRequest, CorrectionRequest, ManualRun
 from astrotrust.collector.service import Collector, progress
-from astrotrust.collector.store import DuplicateCapture, RunStore
+from astrotrust.collector.store import DEFAULT_DATABASE, DuplicateCapture, RunStore
+from astrotrust.research.inventory import research_status
 
 MAX_BODY = 16 * 1024 * 1024
 
@@ -43,12 +56,34 @@ def summary(run: ManualRun) -> dict[str, object]:
 
 
 class CollectorServer(ThreadingHTTPServer):
-    def __init__(self, collector: Collector, port: int) -> None:
+    def __init__(
+        self,
+        collector: Collector | None,
+        port: int,
+        *,
+        consumer: ConsumerCollector | None = None,
+        general_target: tuple[Path, Path] | None = None,
+    ) -> None:
         if not 0 <= port <= 65535:
             raise ValueError("Port must be between 0 and 65535 (0 chooses a free local port)")
-        self.collector = collector
+        self._collector = collector
+        self._collector_lock = Lock()
+        self.consumer = consumer
+        self.general_target = general_target
         self.token = secrets.token_urlsafe(32)
         super().__init__(("127.0.0.1", port), Handler)
+
+    @property
+    def collector(self) -> Collector:
+        # Consumer-only startup never opens the general-purpose store. It is opened
+        # only when the researcher explicitly navigates to a general API operation.
+        with self._collector_lock:
+            if self._collector is None:
+                if self.general_target is None:
+                    raise ValueError("General-purpose collector is unavailable")
+                root, database = self.general_target
+                self._collector = Collector(root, RunStore(database))
+            return self._collector
 
     @property
     def url(self) -> str:
@@ -131,22 +166,108 @@ class Handler(BaseHTTPRequestHandler):
 
     def _get(self) -> None:
         path, q = self._query()
-        c = self.local.collector
         if path == "/favicon.ico":
             self._reply(204, "", "image/x-icon")
-        elif path in {"/", "/collector.css", "/collector.js"}:
-            name = "index.html" if path == "/" else path[1:]
+        elif path in {
+            "/",
+            "/consumer",
+            "/research",
+            "/local",
+            "/collector.css",
+            "/collector.js",
+            "/consumer.js",
+            "/research.js",
+        }:
+            name = {
+                "/": "index.html",
+                "/consumer": "consumer.html",
+                "/research": "research.html",
+                "/local": "local.html",
+            }.get(path, path[1:])
             content = files("astrotrust.collector").joinpath("static", name).read_text("utf-8")
             content = (
-                content.replace("__SESSION_TOKEN__", self.local.token) if path == "/" else content
+                content.replace("__SESSION_TOKEN__", self.local.token)
+                if path in {"/", "/consumer", "/research", "/local"}
+                else content
             )
             types = {
                 "/": "text/html",
                 "/collector.css": "text/css",
                 "/collector.js": "text/javascript",
+                "/consumer": "text/html",
+                "/consumer.js": "text/javascript",
+                "/research": "text/html",
+                "/local": "text/html",
+                "/research.js": "text/javascript",
             }
             self._reply(200, content, types[path])
-        elif path == "/api/bootstrap":
+        elif path == "/api/research/status":
+            # Do not instantiate the lazy frontier collector or create a missing store.
+            general = (
+                self.local.general_target[1]
+                if self.local.general_target
+                else self.local._collector.store.path
+                if self.local._collector
+                else None
+            )
+            consumer = self.local.consumer
+            if general is None or consumer is None:
+                raise ValueError("Research targets unavailable")
+            self._json(research_status(general, consumer.store.path))
+        elif path.startswith("/api/consumer/"):
+            consumer = self.local.consumer
+            if consumer is None:
+                raise ValueError("Consumer collector is unavailable")
+            if path == "/api/consumer/bootstrap":
+                self._json(
+                    {
+                        "schema_version": "consumer-1.1",
+                        "registry_version": REGISTRY_VERSION,
+                        "personal_field_names": PERSONAL_FIELDS,
+                        "profile_field_names": PROFILE_FIELDS,
+                        "profiles": [
+                            {"snapshot": p.model_dump(mode="json"), "sha256": profile_digest(p)}
+                            for p in PROFILES.values()
+                        ],
+                        "prompts": [
+                            {"id": key, "text": value, "sha256": digest(value)}
+                            for key, value in PROMPTS.items()
+                        ],
+                        "runs": [consumer_summary(r) for r in consumer.store.all()],
+                    }
+                )
+            elif path == "/api/consumer/run":
+                self._json(consumer.store.get(q.get("id", "")).model_dump(mode="json"))
+            elif path == "/api/consumer/export":
+                format = q.get("format", "")
+                if format == "single":
+                    content = consumer_exports.single_report(consumer.store.get(q.get("id", "")))
+                elif format in {"jsonl", "csv", "markdown"}:
+                    runs = consumer.store.all()
+                    if not runs:
+                        self._json({"error": "Save a consumer capture before exporting."}, 400)
+                        return
+                    content = consumer_exports.export(runs, cast(ExportFormat, format))
+                else:
+                    raise ValueError("Unknown consumer export format")
+                self._reply(200, content, "text/plain")
+            else:
+                self._json({"error": "Consumer operation not found"}, 404)
+        else:
+            self._general_get(path, q)
+
+    def _general_get(self, path: str, q: dict[str, str]) -> None:
+        if path not in {
+            "/api/bootstrap",
+            "/api/prompt",
+            "/api/progress",
+            "/api/run",
+            "/api/export",
+        }:
+            self._json({"error": "Local page not found"}, 404)
+            return
+        c = self.local.collector
+        if path == "/api/bootstrap":
             self._json(
                 {
                     "scenarios": [
@@ -222,6 +343,31 @@ class Handler(BaseHTTPRequestHandler):
                 return
             body = self.rfile.read(length).decode("utf-8")
             path, q = self._query()
+            if path.startswith("/api/consumer/"):
+                consumer = self.local.consumer
+                if consumer is None:
+                    raise ValueError("Consumer collector is unavailable")
+                if path == "/api/consumer/runs":
+                    consumer_run = consumer.save(ConsumerRequest.model_validate(parse_json(body)))
+                elif path == "/api/consumer/correction":
+                    correction = ConsumerCorrection.model_validate(parse_json(body))
+                    consumer_run = consumer.store.correct(
+                        q.get("id", ""),
+                        correction.metadata,
+                        correction.reason,
+                        correction.expected_revision,
+                    )
+                else:
+                    self._json({"error": "Unknown consumer save operation"}, 404)
+                    return
+                self._json(
+                    {
+                        "run": consumer_run.model_dump(mode="json"),
+                        "runs": [consumer_summary(r) for r in consumer.store.all()],
+                    },
+                    201,
+                )
+                return
             c = self.local.collector
             if path == "/api/runs":
                 run = c.save(CaptureRequest.model_validate(parse_json(body)))
@@ -260,14 +406,38 @@ class Handler(BaseHTTPRequestHandler):
             )
 
 
-def make_server(root: Path, database: Path, port: int = 8765) -> CollectorServer:
-    return CollectorServer(Collector(root, RunStore(database)), port)
+def make_server(
+    root: Path,
+    database: Path,
+    port: int = 8765,
+    *,
+    consumer_database: Path | None = None,
+    start_consumer: bool = False,
+) -> CollectorServer:
+    consumer_database = consumer_database or database.parent / "consumer-app-runs/collector.sqlite3"
+    if database.resolve() == consumer_database.resolve():
+        raise ValueError("Consumer and general-purpose databases must be separate")
+    consumer = ConsumerCollector(root, ConsumerStore(consumer_database))
+    collector = None if start_consumer else Collector(root, RunStore(database))
+    return CollectorServer(collector, port, consumer=consumer, general_target=(root, database))
 
 
-def serve(root: Path, database: Path, port: int) -> None:
-    with make_server(root, database, port) as server:
-        print(f"AstroTrust Manual Collector: {server.url}", flush=True)
-        print(f"Local store: {database.resolve()}\nExploratory only. Stop with Ctrl+C.", flush=True)
+def serve(root: Path, database: Path, port: int, *, consumer_mode: bool = False) -> None:
+    general_database = root / DEFAULT_DATABASE if consumer_mode else database
+    consumer_database = database if consumer_mode else root / DEFAULT_CONSUMER_DATABASE
+    with make_server(
+        root,
+        general_database,
+        port,
+        consumer_database=consumer_database,
+        start_consumer=consumer_mode,
+    ) as server:
+        print(
+            f"AstroTrust Manual Collector: {server.url}" + ("/consumer" if consumer_mode else ""),
+            flush=True,
+        )
+        print(f"General store: {general_database.resolve()}", flush=True)
+        print(f"Consumer store: {consumer_database.resolve()}\nStop with Ctrl+C.", flush=True)
         try:
             server.serve_forever()
         except KeyboardInterrupt:

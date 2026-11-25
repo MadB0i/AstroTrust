@@ -1,8 +1,15 @@
-# Future model experiments
+# Experimental workflow
 
-No provider client, paid API connection or model output is included. Use reviewed
+AstroTrust 2.0 separates frontier manual capture, consumer apps and local inference.
+Local private frontier outputs exist; consumer collection remains pending. An
+[inference-only local interface](../docs/local-models.md) accepts an explicitly
+supplied runtime without provider SDKs or automatic downloads. No real local-model
+experiment, training or held-out AstroGuard result is included. See the
+[research plan](../docs/ASTROTRUST-2.0-PLAN.md).
+
+Use reviewed
 scenarios and `render_prompt(..., research_use=True)` only after a frozen protocol.
-The present CLI is a development preview.
+The present prompt CLI is a development preview, and local attempts remain pilot data.
 
 A future experiment manifest must list scenario/template revisions and hashes,
 language reviews, explicit conditions/contrasts, model/provider identifiers,

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="collector-token" content="__SESSION_TOKEN__">
+<title>AstroTrust Consumer Astrology Collector</title>
+<link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/collector.css">
+<script src="/consumer.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#capture">Skip to capture</a>
+<header class="masthead"><div><p class="eyebrow">AstroTrust 2.0 / Research workstation</p>
+<h1>Consumer astrology service captures</h1><p>Manual capture of observed app and website outputs with complete provenance</p></div>
+<div class="header-status"><span class="badge">Exploratory Pilot</span><p>Saved captures: <strong id="saved-count">—</strong></p><span class="local">Separate local datastore</span></div></header>
+<div class="status-strip" role="region" aria-label="Research status">EXPLORATORY PILOT — NOT FROZEN BENCHMARK DATA</div>
+<nav aria-label="Research workflows"><a href="/research">Research overview</a><a href="/">Frontier models</a><a href="/consumer" aria-current="page">Consumer apps</a><a href="/local">Local models</a><a href="#saved">Saved captures &amp; exports</a></nav>
+<main>
+<p class="callout">Do not enter account credentials, emails, phone numbers, API keys, cookies, or actual personal birth details. Record field names only. For submitted synthetic birth inputs, choose the fixed fictional registry profile below.</p>
+<div id="notice" role="status" aria-live="polite"></div><div id="error" role="alert" tabindex="-1" hidden></div>
+<form id="capture" autocomplete="off">
+<fieldset class="section"><legend><span class="step">01</span> Consumer prompt</legend>
+<div class="fields"><label>Prompt ID<select id="prompt_id" aria-label="Prompt ID" required><option value="">Loading registry…</option></select></label>
+<label>Run number<input id="run_number" type="number" min="1" step="1" value="1" required></label>
+<label class="wide">Repeat identity (optional)<input id="repeat_identity"><span class="hint">Describe a prespecified repeat or session label; omit account identifiers.</span></label></div>
+<div class="actions"><button type="button" id="copy" disabled>Copy Prompt</button></div>
+<label>Registry prompt<textarea id="prompt" readonly rows="7" spellcheck="false"></textarea></label>
+<p class="hint">Copy the selected prompt exactly. Clipboard and textarea line endings may differ from the source. Store the text you actually submitted below.</p>
+<p id="prompt-hash" class="mono wrap"></p>
+<label>Exact initial submitted prompt<textarea id="exact_prompt" rows="7" required spellcheck="false"></textarea></label>
+<label>Prompt deviation reason (only if modified)<input id="protocol_deviation"></label>
+</fieldset>
+<fieldset class="section"><legend><span class="step">02</span> Observed service provenance</legend>
+<p class="hint">Keep exact observed service names. Claims describe visible service statements; unknown stays unknown. Never infer a hidden model or vendor.</p>
+<div class="fields"><label>Service / app name<input id="service_name" required></label>
+<label>Access method<select id="access_method" aria-label="Access method" required><option value="web">web</option><option value="iOS">iOS</option><option value="Android">Android</option><option value="desktop">desktop</option><option value="other">other</option></select></label>
+<label>Cost / access<select id="cost" aria-label="Cost / access" required><option value="unknown">unknown</option><option value="free">free</option><option value="free_trial">free_trial</option><option value="paid">paid</option></select></label>
+<label>AI-generation claim<select id="ai_generated_claimed" aria-label="AI-generation claim" required><option value="unknown">unknown</option><option value="yes">yes</option><option value="no">no</option></select></label>
+<label>Human-involvement claim<select id="human_involvement_claimed" aria-label="Human-involvement claim" required><option value="unknown">unknown</option><option value="yes">yes</option><option value="no">no</option></select></label>
+<label>Response type<select id="response_type" aria-label="Response type" required><option value="unknown">unknown</option><option value="chat">chat</option><option value="generated_report">generated_report</option><option value="horoscope">horoscope</option><option value="other">other</option></select></label>
+<label class="wide">Observed model / engine label (optional)<input id="observed_model_label"><span class="hint">Enter only an explicitly displayed label, preserving its wording.</span></label></div>
+<fieldset><legend>Personal fields requested — names only</legend><p id="fields-hint" class="hint">Select the field names the service requested. Never enter values. Leave unchecked if none were requested. For an unlisted field, request a vocabulary update without supplying values.</p><div id="personal-fields" class="fields" aria-describedby="fields-hint"></div></fieldset>
+</fieldset>
+<fieldset class="section"><legend><span class="step">03</span> Fixed synthetic research input</legend>
+<p class="callout">FICTIONAL / SYNTHETIC RESEARCH INPUT — NOT PARTICIPANT DATA. Use only the fixed registry values. Do not enter real personal birth details or create a custom profile.</p>
+<label>Profile used<select id="profile_id" aria-label="Profile used" required><option value="">Choose whether a profile was used</option><option value="not_used">not_used — no profile information submitted</option></select></label>
+<p id="profile-provenance" class="mono wrap">Loading fixed profile registry…</p>
+<label class="check"><input id="gender_required" type="checkbox" disabled>Service requires gender — enable the fixed synthetic value only when required</label>
+<fieldset><legend>Synthetic profile fields actually submitted</legend><p id="supplied-hint" class="hint">Select only fields actually supplied to this service. This is separate from fields requested above. Copy buttons contain fixed fictional values; they do not submit anything to a service. Gender is supplied only when required.</p><div id="profile-fields" class="fields" aria-describedby="supplied-hint"></div></fieldset>
+</fieldset>
+<fieldset class="section"><legend><span class="step">04</span> Interaction / protocol provenance</legend>
+<p class="hint">The prompt above is the initial prompt. Record follow-up questions, exact answers and other steps leading to the final response. Use only fixed synthetic birth inputs; never include real identifying details.</p>
+<label>Interaction mode<select id="interaction_mode" aria-label="Interaction mode" required><option value="">Choose an interaction history</option><option value="initial_prompt_only">initial_prompt_only — no profile inputs or other exchange</option><option value="prompt_and_fixed_profile_only">prompt_and_fixed_profile_only — prompt plus listed synthetic fields, no other exchange</option><option value="multi_step">multi_step — additional exchange or protocol steps</option><option value="unknown">unknown — interaction history uncertain</option></select></label>
+<label>Interaction record type<select id="interaction_record_type" aria-label="Interaction record type" required><option value="not_applicable">not_applicable — no additional exchange</option><option value="protocol_note">protocol_note — exact account of the steps</option><option value="transcript">transcript — exact exchange with speaker labels</option></select></label>
+<label>Exact interaction / protocol record<textarea id="exact_interaction" rows="8" spellcheck="false" aria-describedby="interaction-hint"></textarea></label>
+<p id="interaction-hint" class="hint">Required for multi_step or unknown. Preserve exact wording, chronology, questions and answers; identify omissions rather than reconstructing them. This record and its hash become immutable. No real birth details or credentials.</p>
+</fieldset>
+<fieldset class="section"><legend><span class="step">05</span> Final raw response and capture observations</legend>
+<label>Raw response<textarea id="raw_response" rows="14" spellcheck="false" aria-describedby="raw-hint"></textarea></label>
+<p id="raw-hint" class="hint">Paste verbatim; no trimming, normalization, HTML rendering or interpretation. Clipboard line endings are preserved in saved evidence even when this textarea displays LF. Empty responses may document a collection failure. Review the pasted text for actual personal details before saving.</p>
+<div class="fields"><label>Capture timestamp with UTC offset<input id="timestamp" required aria-describedby="timestamp-hint"><span id="timestamp-hint" class="hint">ISO-8601, for example 2026-10-05T20:30:00+05:30. Correct the proposed time if needed.</span></label>
+<label>Observed timezone<input id="timezone" required></label>
+<label>Response complete<select id="response_complete" aria-label="Response complete" required><option value="unknown">unknown</option><option value="yes">yes</option><option value="no">no</option></select></label>
+<label>Visible truncation<select id="visibly_truncated" aria-label="Visible truncation" required><option value="unknown">unknown</option><option value="yes">yes</option><option value="no">no</option></select></label>
+<label>Asked for more information<select id="asked_more_information" aria-label="Asked for more information" required><option value="">Choose an observation</option><option value="yes">yes</option><option value="no">no</option><option value="partially">partially</option></select></label>
+<label>Refusal / avoidance<select id="refusal_or_avoidance" aria-label="Refusal / avoidance" required><option value="">Choose an observation</option><option value="yes">yes</option><option value="no">no</option><option value="partially">partially</option></select></label>
+<label class="wide">Capture note (optional)<textarea id="capture_note" rows="3"></textarea><span class="hint">Anomalies and provenance only, without scientific judgment. Profile ID and submitted fields are recorded structurally above. Never enter real birth details or identifying data.</span></label></div>
+</fieldset>
+<div class="save-bar"><button class="primary" id="save" type="submit" disabled>Save Consumer Capture</button><button type="button" id="another">Start another capture</button><span id="save-status" class="hint">Loading consumer registry…</span></div>
+</form>
+<section class="saved" id="saved" aria-labelledby="saved-heading"><div class="section-top"><h2 id="saved-heading">Consumer saved-captures ledger</h2><button type="button" id="reload">Refresh ledger</button></div>
+<p class="hint">Service | prompt ID | run | timestamp | completeness. Select a service to inspect exact text and revision history.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Consumer captures table"><table><caption class="sr-only">Consumer astrology service captures</caption><thead><tr><th scope="col">Service</th><th scope="col">Prompt ID</th><th scope="col">Run</th><th scope="col">Timestamp / timezone</th><th scope="col">Completeness</th></tr></thead><tbody id="run-table"></tbody></table></div>
+<p id="table-empty">Loading saved consumer captures…</p>
+<div class="export-bar"><span>Export all consumer captures</span><button type="button" data-export="jsonl">JSONL · authoritative</button><button type="button" data-export="markdown">Combined Markdown</button><button type="button" data-export="csv">CSV</button></div>
+<p class="hint">Names remain in exports. Anonymization is a separate analysis decision. The general-purpose matrix and its exports are separate.</p></section>
+</main>
+<footer>Manual collection only · no scraping or model connections · integrity hashes do not authenticate service origin</footer>
+<dialog id="detail-dialog" aria-labelledby="detail-title"><div class="section-top"><h2 id="detail-title" tabindex="-1">Saved consumer capture</h2><button type="button" id="close-detail">Close capture detail</button></div>
+<h3>Exact initial submitted prompt</h3><pre id="detail-prompt" tabindex="0"></pre><h3>Interaction / protocol provenance</h3><p id="detail-interaction-mode"></p><pre id="detail-interaction" tabindex="0"></pre><h3>Exact final raw response</h3><pre id="detail-response" tabindex="0"></pre>
+<h3>Complete provenance, hashes and history</h3><pre id="detail-record" tabindex="0"></pre>
+<div class="actions"><button type="button" id="single-export">Export Run Report</button><button type="button" id="correct">Correct metadata with history</button></div>
+<form id="correction-form" hidden><p class="hint">Only metadata can change. Raw text remains immutable; every revision retains earlier metadata.</p><div id="correction-error" role="alert"></div>
+<label>Complete corrected metadata (JSON)<textarea id="corrected-meta" aria-describedby="correction-error" rows="14" required spellcheck="false"></textarea></label>
+<label>Correction reason<input id="correction-reason" required></label><button type="submit" id="save-revision">Save Metadata Revision</button><button type="button" id="cancel-revision">Cancel metadata correction</button></form>
+</dialog>
+<dialog id="discard-dialog" aria-labelledby="discard-title"><h2 id="discard-title">Discard unsaved capture?</h2><p>This form has unsaved entries. Discard them to change the prompt, start again, or switch workflows.</p><div class="actions"><button type="button" id="keep">Keep collecting</button><button type="button" id="discard">Discard and continue</button></div></dialog>
+</body></html>

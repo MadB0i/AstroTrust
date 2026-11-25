@@ -1,0 +1,168 @@
+{
+  "apk_dir": "D:\\ASTRO",
+  "apks": [
+    {
+      "filename": "Astrotalk.apk",
+      "status": "ok",
+      "size_bytes": 89910970,
+      "sha256": "527331d1c60a953cb0a9613438e967f398d970e9767349f0cbccfbd56ecffe3d",
+      "zip_entry_count": 7825,
+      "dex_count": 7,
+      "react_native_hermes": false,
+      "manifest": {
+        "package": "com.astrotalk",
+        "version_name": "1.1.545",
+        "version_code": 545,
+        "permissions_count": 48,
+        "has_query_all_packages": false,
+        "has_detect_screen_capture": false,
+        "query_package_tags": 823,
+        "query_intent_tags": 14
+      },
+      "unique_query_packages_count": 804,
+      "tracker_evidence": {
+        "apppackges_entries": 787,
+        "apppackges_unique_packages": 787,
+        "manifest_query_coverage_of_apppackges": 787,
+        "dex_has_external_package_tracker": true,
+        "dex_has_execute_24h_check": true,
+        "dex_has_user_apps_installed_route": true,
+        "dex_has_save_user_upi_apps_route": true,
+        "category_breakdown": {
+          "Travel, E-Commerce, Ride-Hailing, Food & Other": 189,
+          "Global Banking, UPI, Wallets & Remittance": 113,
+          "Competitor Astrology, Tarot, Psychic & Advisor": 103,
+          "OTT Streaming, Media, News & Audio": 90,
+          "Real-Money Gambling, Fantasy Sports & Betting": 49,
+          "Dating, Matrimony & Live Video Chat": 46,
+          "Stock Trading, Wealth & Crypto": 38,
+          "Consumer Loans, BNPL, Gold Loans & Credit": 36,
+          "Health, Insurance, Pharmacy & Wearables": 34,
+          "EdTech, Exam Prep & Job Search": 26,
+          "Devotional, Panchang & Spiritual": 18,
+          "Reproductive Health, Pregnancy & Mental Therapy": 16,
+          "Gig-Economy Driver & Delivery Partner": 9,
+          "AI Assistants": 8,
+          "Indian Government Identity & Welfare": 8,
+          "Rail & Commuter Transit": 4
+        }
+      },
+      "top_first_party_urls": [
+        "https://astrotalk.com/best-astrologer/",
+        "http://aws.astrotalk.com/consultant_pic/",
+        "https://api.prod.astrotalk.in/AstroTalk//consultant/get/slug",
+        "https://astrotalk.com/live/",
+        "https://api.astromall.astrotalk.com/AstroMall/astromall/select/address/v2",
+        "https://api.consultant.list.astrotalk.com/AstroTalk/freeAPI/consultant/get/single/consultant",
+        "https://api.paidchat.astrotalk.com/AstrotalkChat/chat/order/canceled/byUser/v2",
+        "https://api.prod.astrotalk.in/AstroTalk/managementFeedback/add",
+        "https://api.prod.astrotalk.in/AstroTalk/notify-user/for/consultant-services",
+        "https://api.prod.astrotalk.in/AstroTalk/nps/score/addupdate",
+        "https://api.prod.astrotalk.in/AstroTalk/offer/promotional/applyCode/v2",
+        "https://api.prod.astrotalk.in/AstroTalk/payment-log/delete"
+      ]
+    },
+    {
+      "filename": "Pandit Ji.apk",
+      "status": "ok",
+      "size_bytes": 97030138,
+      "sha256": "d08a504021748671f03df7b6cc21d18fd6dbb1e73ef6ae0c369b71dc42b1b647",
+      "zip_entry_count": 7119,
+      "dex_count": 6,
+      "react_native_hermes": false,
+      "manifest": {
+        "package": "com.astrology.panditji",
+        "version_name": "1.1.421",
+        "version_code": 421,
+        "permissions_count": 46,
+        "has_query_all_packages": false,
+        "has_detect_screen_capture": false,
+        "query_package_tags": 26,
+        "query_intent_tags": 13
+      },
+      "unique_query_packages_count": 26,
+      "tracker_evidence": {},
+      "top_first_party_urls": [
+        "https://astrotalk.com/shared/call-recording/",
+        "https://astrotalk.com/best-astrologer/",
+        "http://aws.astrotalk.com/consultant_pic/",
+        "http://aws.astrotalk.com/images/",
+        "https://astrotalk.com/",
+        "https://astrotalk.com/kundali-report/",
+        "https://astrotalk.com/signup",
+        "http://www.theastrotalk.com/discussions/",
+        "https://astrotalk.com",
+        "https://astrotalk.com/book",
+        "https://astrotalk.com/chat",
+        "https://astrotalk.com/claim"
+      ]
+    },
+    {
+      "filename": "Reva.apk",
+      "status": "ok",
+      "size_bytes": 38405425,
+      "sha256": "d399c180003c497cb4dec8b3543c28f162fe425e24e4e0051ee7a25805ae28e7",
+      "zip_entry_count": 1500,
+      "dex_count": 5,
+      "react_native_hermes": true,
+      "manifest": {
+        "package": "in.mohalla.reva",
+        "version_name": "2026.24.2",
+        "version_code": 2026242,
+        "permissions_count": 33,
+        "has_query_all_packages": false,
+        "has_detect_screen_capture": true,
+        "query_package_tags": 83,
+        "query_intent_tags": 9
+      },
+      "unique_query_packages_count": 83,
+      "tracker_evidence": {},
+      "top_first_party_urls": [
+        "https://revaastro.in/privacyPolicy",
+        "https://revaastro.in/termsLink/undo_cta_tapplyMoves",
+        "https://payments.sharechat.com.android.voicemail.permission.WRITE",
+        "https://apis.sharechat.com/media-upload-service/v1.0.0/mediaUploadBundle"
+      ]
+    },
+    {
+      "filename": "AstroTime.apk",
+      "status": "ok",
+      "size_bytes": 25759284,
+      "sha256": "0ff2c9d297cf548f656db975b2a16dd49d49d3588e871b4b8a25777b041049ef",
+      "zip_entry_count": 1315,
+      "dex_count": 2,
+      "react_native_hermes": true,
+      "manifest": {
+        "package": "com.theastrotime",
+        "version_name": "4.1.8",
+        "version_code": 47,
+        "permissions_count": 42,
+        "has_query_all_packages": false,
+        "has_detect_screen_capture": false,
+        "query_package_tags": 9,
+        "query_intent_tags": 13
+      },
+      "unique_query_packages_count": 9,
+      "tracker_evidence": {},
+      "top_first_party_urls": [
+        "https://apis.theastrotime.combineFuncss-treeForkCountInvalid"
+      ]
+    },
+    {
+      "filename": "AstroSage AI.apk",
+      "status": "empty_stub_0_bytes",
+      "size_bytes": 0
+    }
+  ],
+  "astrotalk_vs_panditji_overlap": {
+    "apk_a_entries": 7825,
+    "apk_b_entries": 7119,
+    "shared_paths": 6193,
+    "shared_paths_pct_of_b": 86.99,
+    "byte_crc_identical": 3172,
+    "byte_identical_pct_of_a": 40.54,
+    "byte_identical_pct_of_b": 44.56,
+    "apk_b_dex_astrotalk_mentions": 1470,
+    "apk_b_dex_astrobuddy_mentions": 22
+  }
+}

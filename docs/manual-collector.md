@@ -1,5 +1,11 @@
 # AstroTrust Manual Collector
 
+AstroTrust 2.0 labels this workflow **Frontier models** at `/`. The
+**Research overview** at `/research` reads actual local counts; **Consumer apps**
+at `/consumer` and **Local models** at `/local` are separate workflows. The
+manual-1.0 schema, exact prompts, snapshots and collection rules are unchanged.
+Derived annotation is described in [response analysis](response-analysis.md).
+
 **Structured capture of frontend LLM responses for exploratory research.**
 
 **EXPLORATORY PILOT — NOT FROZEN BENCHMARK DATA.** Prompts and `instrument-v0.1`
@@ -179,7 +185,7 @@ security headers, and does not log payloads. Restarting the server expires the t
 export/copy any unsaved draft before reloading. These controls do not protect against
 other users/processes with access to the local filesystem or browser profile.
 
-## Initial matrix and future services
+## Initial matrix and separate consumer services
 
 One scenario supports ChatGPT, Claude and Gemini × three belief conditions × three
 independent repeats = **27 planned captures**, initially zero. The ledger follows the
@@ -188,12 +194,19 @@ labels get separate nine-slot grids; counts never claim three authoritative back
 versions or silently merge UI labels. Other products remain searchable in saved runs.
 The matrix and saved runs contain coverage/provenance only, no scores.
 
-Future `consumer_astrology_service` metadata can record service name, explicit
-AI-generation/human-involvement claims (yes/no/unknown), cost (free/paid/unknown),
-response type (chat/generated_report/horoscope/unknown) and **names** of personal
-fields requested. Never enter personal field values. Metadata describes observed
-claims, not verified backend architecture. No such vendors, logos, automation or
-outputs are included; the first UI captures general-purpose LLM frontends only.
+The [consumer astrology workflow](consumer-collector.md) now provides a separate
+`/consumer` page, fixed prompt registry, `consumer-1.1` records and default
+`data/pilot/consumer-app-runs/collector.sqlite3` store. Start it with
+`uv run --locked python -m astrotrust collect-consumer` and open
+`http://127.0.0.1:8766/consumer`. Its records and exports do not join this matrix.
+The reserved service fields in `manual-1.0` remain unchanged for backward schema
+compatibility; new consumer captures use the separate schema. Consumer-tagged legacy
+manual records cannot contribute to general-purpose coverage. Names and observed
+claims are retained; real personal values and inferred backend labels are not requested.
+Consumer captures now retain the explicitly fixed fictional profile snapshot and
+submitted-field list, or `not_used`, plus exact multi-step interaction provenance.
+Real personal birth inputs remain prohibited; the synthetic registry is separate
+from general-purpose captures and participant data.
 Third-party proprietary outputs must not be redistributed automatically.
 
 ## Verification and limits

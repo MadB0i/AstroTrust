@@ -1,142 +1,142 @@
-# AstroTrust
+# AstroTrust 2.0
 
-**Work in progress — research foundation, without model runs or results.**
+**Independent research in progress. Evidence collection is exploratory; no validated
+benchmark scores or published findings are claimed.**
 
-AstroTrust studies observable model behaviour around astrological beliefs, with an
-initial India-focused context. **AstroTrustBench** is its controlled, multilingual
-benchmark component. The working paper direction is *When AI Reads the Stars:
-Trust, Personalization, and Sycophancy in AI-Generated Astrological Advice in India*.
-This is a research direction, not a published paper.
+AstroTrust evaluates how AI systems handle astrology-related beliefs, uncertain
+claims and consequential advice. Its primary question is: **How reliably do AI
+systems distinguish astrology-based beliefs from evidence-supported advice,
+particularly in consequential decision-making scenarios?** The study evaluates
+system behavior. Public opinion and real-world user effects are outside its scope.
+It does not test whether astrology predictions are scientifically valid.
+India-focused fictional contexts do not represent a population or tradition.
 
-The research question is: how do large language models respond to astrological
-beliefs, and can personalization, user framing, confidence, or source presentation
-influence trust and willingness to rely on AI-generated astrological advice?
+The public participant survey has been discontinued as a research-scope decision.
+It is no longer a deliverable, prerequisite or collection workflow. Independent
+construction review, response annotation and adjudication remain essential.
+See the [revised plan](docs/ASTROTRUST-2.0-PLAN.md),
+[migration audit](docs/ASTROTRUST-PIVOT-AUDIT.md) and
+[superseded proposal archive](docs/archive/README.md).
 
-This repository neither endorses nor rejects astrology, judges believers, nor
-assumes AI is manipulative. It measures responses under specified conditions.
-It does not calculate charts or define correct astrological predictions.
-
-## Current instrument
-
-The internal checkpoint is [instrument-v0.1](docs/instrument-version.md): English-only
-development fixtures at the construction-review stage, without validated metrics,
-model results or a participant study. This is not a published benchmark release.
-Two [pending human-review bundles](reviews/pending/README.md) are prepared; independent
-review is still pending and [benchmark expansion is blocked](docs/scale-up-gate.md).
-
-Eight fictional development scenarios cover career, education, relationships,
-finance, health, relocation, family and everyday decisions. Each can render a
-matched English trio: neutral, positive expectation and negative expectation.
-Only the belief sentence changes. Emotion and personalization are separately
-represented; they must be tested in matched comparisons rather than mixed into
-belief contrasts. Shared context is essential: otherwise an apparent belief effect
-could be caused by changed facts, emotional tone or requests.
-
-English text is a development draft. Hindi (`hi`) and Assamese (`as`) are expected
-languages with translations pending. No multilingual equivalence is claimed.
-All research-use rendering requires recorded human review. Structural validation
-does not establish construct validity, ethical readiness or linguistic equivalence.
-
-BCAS (Belief-Conditioned Agreement Score) and ADRS (Astrological Decision Reliance
-Score) are provisional constructs represented by qualitative annotation records.
-There is no numerical scoring formula, validated scale, judge or leaderboard.
-The [draft annotation handbook](docs/annotation-handbook.md) now distinguishes
-response labels from matched comparisons. An ordinal reliance component is a draft
-rubric, without an ADRS aggregate. The [review workflow](reviews/README.md) provides
-partially blinded construction-review packets, annotation validation, two-rater
-agreement and separate adjudication records. No actual human reviews exist yet.
-Response analysis alone cannot measure human trust or actual reliance.
-
-## Local use
-
-Python 3.12 or newer is required. From the repository root, with `uv` installed:
+## Research workstation
 
 ```powershell
 uv sync --locked --extra dev
-uv run --locked --extra dev python -m astrotrust validate benchmark/scenarios
-uv run --locked --extra dev python -m astrotrust inspect atb-career-001
+uv run --locked python -m astrotrust collect
+```
+
+Open the printed URL, then select **Research overview** (`/research`). Frontier
+captures remain at `/`; consumer collection remains at `/consumer`; local baseline
+instructions are at `/local`. The overview reads the selected stores without
+writing or creating the lazily opened frontier store. Missing or unreadable stores
+show unavailable status rather than a fabricated zero.
+
+| Study arm | Implemented | Evidence status (25 November 2026) |
+| --- | --- | --- |
+| Frontier models | [Manual collector](docs/manual-collector.md), SQLite snapshots, exports, [draft label analysis](docs/response-analysis.md) | 27 local exploratory captures (`atb-career-001` across ChatGPT, Claude, Gemini); original JSONL/Markdown exports preserved (`data/pilot/`, Git ignored) |
+| Consumer astrology apps | [Separate collector](docs/consumer-collector.md), `consumer-1.1` profiles, static APK auditor (`tools/audit_apks.py`) | 6 live exploratory captures across 5 Android apps (`Astrotalk`, `Pandit Ji`, `Reva`, `AstroSage`, `AstroTime`) + binary forensic audit (`data/results/apk_forensic_summary.json`) |
+| Local small models | [Inference-only adapter interface](docs/local-models.md), HuggingFace adapter (`tools/hf_local_adapter.py`) | 16 local `Qwen/Qwen2.5-0.5B-Instruct` baseline inference runs (`data/runs/local/`, Git ignored) |
+| AstroGuard | [Experimental design](docs/ASTROTRUST-2.0-PLAN.md), rule baseline + LoRA trainer (`tools/train_astroguard.py`) | Exploratory deterministic baseline (`N=49`) + prompt-masked `Qwen2.5-0.5B-LoRA` prototype (`models/astroguard/`, evaluated in `data/results/astroguard_eval.json`; out-of-domain scenario-family evaluation still pending) |
+
+Full working manuscript: [docs/paper_draft.md](docs/paper_draft.md) · [Manuscript outline](docs/research-paper-outline.md) · [Empirical comparison table](data/results/empirical_comparison_table.md)
+
+These are verified local inventory counts, not packaged research data or performance
+results. A fresh clone contains no captured outputs. The overview refreshes actual
+store counts; this dated table is an audit observation. Exact frontend model labels
+are observations, not authenticated backend identities. Unknown settings remain
+unknown. Consumer protocols, account configuration and interaction histories differ
+from the frontier matrix; comparisons must disclose those differences.
+
+For consumer-first startup:
+
+```powershell
+uv run --locked python -m astrotrust collect-consumer
+```
+
+Open the printed `/consumer` URL. This keeps the frontier database unopened until a
+frontier API operation is requested. Consumer captures require the fixed fictional
+profile or explicit `not_used`, submitted-field names, and exact multi-step protocol
+evidence where applicable. Keep `consumer-1.1` and profile hashes unchanged.
+
+**Do not inspect or score earlier responses while deciding whether to continue collection.**
+This pivot adds analysis capability; it does not close the pilot, authorize adaptive
+stopping or relabel existing evidence as confirmatory or held-out data.
+
+## Instrument and analysis boundaries
+
+[instrument-v0.1](docs/instrument-version.md) remains locked at eight fictional
+development scenarios and 24 default English prompts. Hindi and Assamese are
+pending, and no multilingual equivalence is claimed. Literal matched contrasts
+change only the belief sentence; emotion and personalization require separate
+controlled comparisons. Research-use rendering still requires human review.
+
+The [draft annotation handbook](docs/annotation-handbook.md) and
+[independent reviewer bundles](reviews/pending/README.md) remain intact.
+BCAS and ADRS are provisional constructs without a validated numerical aggregate.
+Capture annotation sidecars verify snapshot hashes and response excerpts, retain
+individual evaluator votes, and keep model judgments separate from human judgments.
+Descriptive category counts are available; they do not establish construct validity,
+actual trust, safety improvements or causal effects. The [scale-up gate](docs/scale-up-gate.md)
+still requires independent review and a prespecified design.
+
+```powershell
+uv run --locked python -m astrotrust research status
+uv run --locked python -m astrotrust research summarize data/pilot/exports/pilot-2026-10-05.jsonl
+uv run --locked python -m astrotrust research infer-local --help
+uv run --locked python -m astrotrust research validate-splits PATH_TO_MANIFEST.json
+```
+
+The summary command above requires the existing private local export. It returns no
+research labels until actual annotation sidecars are supplied. No model is downloaded
+or contacted by status, validation, summary or UI navigation. Local inference runs
+only through an explicitly supplied adapter; no training implementation is included.
+
+## Reproducibility and repository map
+
+| Path | Role |
+| --- | --- |
+| `benchmark/`, `astrotrust/benchmark/` | Versioned scenarios, conditions, prompts, hashes and schemas |
+| `astrotrust/collector/` | Preserved frontier and consumer capture workflows and local UI |
+| `astrotrust/research/` | Read-only inventory, capture label summaries, split checks and local inference |
+| `astrotrust/annotations/`, `astrotrust/metrics/` | Existing annotation, agreement, adjudication and legacy draft constructs |
+| `astrotrust/reviews/`, `reviews/` | Independent construction review, frozen packets and blank forms |
+| `docs/` | [Methodology](docs/methodology.md), plan, audit, [paper outline](docs/research-paper-outline.md) and protocol guidance |
+| `data/`, `analysis/`, `experiments/` | Governance, analysis boundaries and experiments |
+| `docs/archive/` | Explicitly superseded survey-era proposals and original document bytes |
+| `tests/`, `tools/`, `.github/` | Integrity, compatibility, UI checks and CI |
+
+Raw text, canonical and submitted prompts, settings observations, all metadata
+revisions and original exports are retained. New analysis uses separate artifacts;
+it never rewrites collection history. Keep pilot, training, validation and held-out
+test families disjoint, including related translations/paraphrases and consumer
+variants. Hash checks aid reproducibility but cannot authenticate remote origins.
+See [data governance](data/README.md), [ethics](docs/ethics.md) and
+[benchmark card](docs/benchmark-card.md).
+
+## Verification
+
+Python 3.12+ is required. After installing locked dependencies, checks run offline:
+
+```powershell
 uv run --locked --extra dev python -m pytest
 uv run --locked --extra dev ruff format --check .
 uv run --locked --extra dev ruff check .
 uv run --locked --extra dev mypy astrotrust tests tools
-uv run --locked --extra dev python tools/export_schema.py --check
-uv run --locked --extra dev python tools/check_review_example.py
-uv run --locked --extra dev python tools/check_review_bundles.py
+uv run --locked python -m astrotrust validate benchmark/scenarios
+uv run --locked python tools/export_schema.py --check
+uv run --locked python tools/export_collector_schema.py --check
+uv run --locked python tools/export_consumer_schema.py --check
+uv run --locked python tools/check_review_example.py
+uv run --locked python tools/check_review_bundles.py
+uv run --locked python tools/check_research_docs.py
 ```
 
-Alternatively, `python -m pip install -e ".[dev]"` supports development with pip;
-it resolves dependency ranges rather than reproducing the committed `uv.lock`.
-Installation may access package indexes; the tests, validation and renderer work
-offline after dependencies are installed. No provider credentials are needed.
-The JSON sources are deliberately repository assets, not bundled wheel data;
-CLI defaults assume the repository root, with path overrides available.
+Optional browser checks use the existing `ui` extra, an installed Chromium-compatible
+browser and a local axe script; commands and limitations are in the migration audit.
+CLI defaults assume this repository's assets; path overrides remain available.
 
-## Repository map
-
-| Path | Role |
-| --- | --- |
-| `benchmark/` | Scenario JSON, template, language registry, exported schema and protocol |
-| `astrotrust/benchmark/` | Typed conditions, scenarios, prompts and future run records |
-| `astrotrust/validation/` | Strict loading, duplicate detection and limited privacy warnings |
-| `astrotrust/metrics/` | Provisional human-observation interfaces |
-| `astrotrust/annotations/` | Versioned response/comparison records, agreement and adjudication |
-| `astrotrust/reviews/`, `reviews/` | Offline construction-review exporter, example and blank forms |
-| `astrotrust/collector/` | Offline manual frontend pilot capture, immutable raw text and portable exports |
-| `docs/` | Methodology, benchmark card, ethics and terminology |
-| `experiments/` | Future run protocol; no API integration |
-| `survey/` | Scope boundary for a later consented human study |
-| `data/`, `analysis/` | Governance and future analysis constraints |
-| `tests/`, `tools/` | Offline invariants and schema export |
-
-## Exploratory manual capture
-
-The [AstroTrust Manual Collector](docs/manual-collector.md) captures responses that a
-researcher manually copies from public frontends. Launch from the repository root:
-
-```powershell
-uv run --locked python -m astrotrust collect
-```
-
-Open the printed local URL. Choose a scenario/condition, copy its exact prompt,
-manually start a fresh frontend conversation, paste its complete response and record
-the exact UI model label/settings. A local SQLite store preserves raw text, hashes
-and metadata revision history; JSONL, CSV and full Markdown reports provide exports.
-Raw pilot files under `data/pilot/` are Git ignored. No model request, scraping or
-scoring is performed. The initial 27-slot matrix starts empty. Collection remains
-**Exploratory Pilot — not frozen benchmark data** and satisfies no human-review gate.
-The collector has a separate `manual-1.0` schema; `instrument-v0.1` is unchanged.
-
-**Do not inspect or score earlier responses while deciding whether to continue collection.**
-
-## Reproducibility and limits
-
-Source revisions, explicit conditions, template versions, prompt hashes and complete
-message snapshots connect a future response to its inputs. Run records preserve
-provider/model identifiers, settings, replicate number, timezone-aware timestamp,
-raw response, evaluator version, code revision and environment record. Unknown
-provider details stay null. Deterministic rendering does not imply deterministic
-remote generation, even with a seed. Provider updates and defaults require capture.
-
-These eight fixtures exercise the instrument. Their adult contexts and deliberately
-coarse profiles do not represent India, particular traditions, or the distribution
-of astrological use. Wording and stakes assignments need independent review.
-There is no sample-size claim, effect estimate, human study or fabricated output.
-
-## Next milestones
-
-1. Independently review the eight English scenarios using the construction-review packet.
-2. Review the handbook and high-stakes boundaries; define translation/review roles
-   before producing Hindi and Assamese equivalents.
-3. Prespecify a small response-annotation pilot, including agreement criteria and
-   category coverage; assess handbook usability and provisional constructs.
-4. Satisfy the [proposed scale-up gate](docs/scale-up-gate.md), then freeze and
-   preregister the expansion design before broader model runs. Retain all revisions
-   and attempted runs; human-review multilingual equivalents before research use.
-5. Design a separately approved, consented randomized human study of trust and reliance.
-
-Code, documentation and the current synthetic fixtures use MIT; future participant
-data require separate consent, governance and licensing. See [data governance](data/README.md),
-[methodology](docs/methodology.md), [benchmark card](docs/benchmark-card.md) and
-[ethics](docs/ethics.md). `CITATION.cff` identifies the software using the verified
-repository-owner handle; personal attribution requires maintainer confirmation
-and no DOI or publication is asserted.
+Code, documentation and fictional fixtures use MIT. Generated outputs and identifying
+reviewer records need separate access and redistribution decisions; Git ignores are
+not access controls. `CITATION.cff` identifies development software without a published
+paper or DOI. AstroTrust 2.0 names the research pivot, not a new instrument version,
+package release or claim that planned experiments have been completed.

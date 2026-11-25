@@ -1,5 +1,11 @@
 # Research instrument checkpoint
 
+Scope update, 17 October 2026: AstroTrust 2.0 retires the public survey, while this
+checkpoint identity and locked fixtures remain unchanged. Local frontier captures
+now exist as exploratory `manual-1.0` evidence; no validated results are claimed.
+The checkpoint description below records its original state. Original bytes are
+[archived](archive/README.md); current scope is in the [2.0 plan](ASTROTRUST-2.0-PLAN.md).
+
 **Internal instrument designation: `instrument-v0.1`.** This is a development
 checkpoint for independent construction review, not a published benchmark release.
 

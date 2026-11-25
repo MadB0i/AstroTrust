@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="collector-token" content="__SESSION_TOKEN__">
+  <title>AstroTrust / Research overview</title>
+  <link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/collector.css">
+  <script src="/research.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#research">Skip to research overview</a>
+  <header class="masthead"><div><p class="eyebrow">AstroTrust 2.0 / Research workstation</p>
+    <h1>Evidence before conclusions</h1>
+    <p>How reliably do AI systems distinguish astrology-based beliefs from evidence-supported advice in consequential decisions?</p>
+  </div><span class="badge">Instrument under review</span></header>
+  <div class="status-strip" role="region" aria-label="Research status">System behavior evaluation · public survey discontinued</div>
+  <nav aria-label="Research workflows">
+    <a href="/research" aria-current="page">Research overview</a><a href="/">Frontier models</a>
+    <a href="/consumer">Consumer apps</a><a href="/local">Local models</a>
+  </nav>
+  <main id="research" tabindex="-1">
+    <section class="research-ledger" aria-labelledby="ledger-title">
+      <div class="section-top"><h2 id="ledger-title">Study ledger</h2><button id="refresh-status" type="button">Refresh evidence status</button></div>
+      <p id="status-notice" role="status" aria-live="polite">Loading local evidence inventory…</p>
+      <p id="status-error" role="alert" hidden></p>
+      <div class="study-row"><div><span class="step">A</span><h3><a href="/">Frontier model evaluation</a></h3><p>Manual frontend captures with exact UI model labels, prompt snapshots, raw text and revision history.</p></div><div><strong id="frontier-count" class="study-count">—</strong><span>saved captures</span></div><div><p id="frontier-state">Checking store…</p><p class="hint">manual-1.0 · instrument-v0.1</p></div></div>
+      <div class="study-row"><div><span class="step">B</span><h3><a href="/consumer">Consumer astrology apps</a></h3><p>Separate app protocol and fixed synthetic profiles. Underlying models stay unknown unless explicitly disclosed.</p></div><div><strong id="consumer-count" class="study-count">—</strong><span>saved captures</span></div><div><p id="consumer-state">Checking store…</p><p class="hint">consumer-1.1 · consumer-career-1.0</p></div></div>
+      <div class="study-row"><div><span class="step">C</span><h3><a href="/local">Local small-model baselines</a></h3><p>Provider-independent inference interface for an explicitly supplied local runtime.</p></div><div><strong class="study-word">Prepared</strong><span>interface only</span></div><div><p>Experiments pending</p><p class="hint">No local experiment directory inventoried here</p></div></div>
+      <div class="study-row"><div><span class="step">D</span><h3>AstroGuard</h3><p>Proposed comparison of deterministic rules, untuned inference and optional adaptation against held-out human annotations.</p></div><div><strong class="study-word">Proposed</strong><span>research extension</span></div><div><p>No trained or validated classifier</p><p class="hint">Training requires separate approval</p></div></div>
+    </section>
+    <div class="research-notes">
+      <section><h2>Read the evidence in context</h2><p>Counts describe records in the selected local stores, including incomplete or failed captures. They do not establish independent observations, valid measurement, model performance or real-world impact.</p><p>Collection status and study readiness are separate. Preserve the exploratory pilot; freeze the next protocol before broader collection. Keep pilot, training, validation and held-out scenarios disjoint.</p></section>
+      <section><h2>Annotation remains independent</h2><p>Construction review and response annotation continue. The rubric is <strong>draft-1.0</strong>; BCAS and ADRS have no validated aggregate formula.</p><p>Record human and model judgments separately. Preserve disagreements, evidence spans and individual annotations. A model judgment is never automatically verified ground truth.</p></section>
+    </div>
+  </main>
+  <footer>AstroTrust · Local research evidence · Integrity hashes do not authenticate service origin</footer>
+</body>
+</html>

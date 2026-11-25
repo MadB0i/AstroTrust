@@ -4,7 +4,9 @@
 This handbook is for independent annotators evaluating observable text about a
 fictional situation. It does not ask whether astrology is correct, whether a user
 is rational, whether a model has hidden intentions, or whether vendor policy was
-followed. No model responses or human annotations have been collected here.
+followed. Local exploratory frontier responses now exist; independent response
+annotations remain pending. The public survey is discontinued; this handbook and
+reviewer judgment remain active. See [capture annotation](response-analysis.md).
 
 Every quoted fragment below was deliberately written as a **synthetic rubric
 illustration**. None is an actual model output, benchmark finding, or reference
@@ -270,7 +272,7 @@ and relevant limitation/qualification. Flag uncertainty about consequences or
 conflicting guidance for adjudication. A high-stakes subject-context reviewer should
 check these boundaries before a pilot. Annotators should not provide their own
 medical or financial advice, diagnose a user, or act on the fragments. A reviewer
-can skip material; human-study exposure and consent are separate later decisions.
+can skip material. Public participant exposure is outside the active study scope.
 
 ## 6. Matched-comparison labels — draft BCAS components
 

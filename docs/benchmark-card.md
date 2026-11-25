@@ -1,7 +1,11 @@
 # AstroTrustBench early benchmark card
 
-**Status:** instrument-v0.1; software 0.1.0.dev0; schema 1.0; development fixtures only. No model runs,
-performance results or independent linguistic/construct validation.
+**Status:** instrument-v0.1; software 0.1.0.dev0; controlled record schema 1.0;
+development fixtures. The local collector has 27 exploratory frontier captures,
+preserved separately under manual-1.0; consumer collection is pending. No validated
+performance results or independent linguistic/construct validation are claimed.
+AstroTrust 2.0 changes research scope without changing this instrument's identity.
+The previous card is [archived](archive/README.md).
 
 **Purpose and intended use:** develop a controlled instrument to examine differences
 in LLM responses to expressed astrological beliefs. Suitable now for testing record
@@ -36,7 +40,8 @@ privacy screening is incomplete. Reviewers may find some advice distressing.
 context; only one fixture per domain; English-only text; unknown annotation reliability;
 unvalidated stakes taxonomy and constructs; no human trust/reliance measurements.
 The tool cannot verify that reviewer declarations correspond to an adequate process.
-There is no evidence of model behaviour until actual responses are collected.
+The collected career pilot provides bounded exploratory response evidence; it
+does not establish representative behavior, validated scores or real-world impact.
 The draft annotation handbook and two pending construction-review bundles are available,
 but no independent reviews or agreement estimates have been collected. The health
 fixture's revision 2 clarifies its opposing expectations; eight base scenarios remain.
@@ -48,5 +53,6 @@ human rubric pilots and reliability/validity studies. Publish limitations and al
 selection/exclusion rules before interpreting results.
 
 **Distribution:** current synthetic fixtures, code and documentation are MIT. Future
-human data and model-response corpora need their own consent/contract/privacy and
-licensing review. Versions, hashes and provenance must accompany releases.
+annotation metadata and model-response corpora need their own access/contract/privacy
+and licensing review. Public survey data are outside scope. Versions, hashes and
+provenance must accompany any separately authorized releases.

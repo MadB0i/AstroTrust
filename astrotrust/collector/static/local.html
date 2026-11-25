@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AstroTrust / Local model baselines</title>
+  <link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/collector.css">
+</head>
+<body>
+  <a class="skip" href="#local">Skip to baseline workflow</a>
+  <header class="masthead"><div><p class="eyebrow">AstroTrust 2.0 / Research workstation</p>
+    <h1>Local model baselines</h1><p>An inference-only interface. Real experiments require an installed model, a recorded runtime and a frozen protocol.</p>
+  </div><span class="badge">Prepared · experiments pending</span></header>
+  <div class="status-strip" role="region" aria-label="Research status">No models downloaded · no training performed · no safety improvement established</div>
+  <nav aria-label="Research workflows"><a href="/research">Research overview</a><a href="/">Frontier models</a><a href="/consumer">Consumer apps</a><a href="/local" aria-current="page">Local models</a></nav>
+  <main id="local" tabindex="-1">
+    <section class="research-ledger"><h2>Before inference</h2>
+      <ol class="protocol-steps"><li>Choose an already installed small open-weight model, such as Qwen or Gemma. Record the exact artifact and tokenizer hashes, quantization, chat template, runtime version and hardware.</li><li>Prepare a versioned request with the exact message snapshot, generation settings and replicate number. Current requests remain exploratory pilot data.</li><li>Supply an explicit adapter command. It accepts one JSON request on stdin and returns one JSON inference result on stdout. No provider library is required.</li><li>Save every completion and failure to a new file. Retain independent annotations separately; preserve the source evidence and all attempted runs.</li></ol>
+      <p>Request schema, adapter contract and command examples: <span class="mono">docs/local-models.md</span> in this checkout.</p>
+      <pre tabindex="0" aria-label="Local inference command help">python -m astrotrust research infer-local --help
+python -m astrotrust research validate-local PATH_TO_ATTEMPT.json
+python -m astrotrust research validate-splits PATH_TO_MANIFEST.json</pre>
+    </section>
+    <div class="research-notes"><section><h2>Comparable, with limits</h2><p>Reuse documented scenarios and conditions where possible. Record every change to system context, template, decoding and interaction history. Consumer apps use a distinct protocol and may involve unknown models or human input; equal prompt topics do not make a controlled model comparison.</p></section><section><h2>AstroGuard is proposed</h2><p>Prespecify deterministic rules and compare them with untuned inference. Optional fine-tuning is a later, separately approved experiment. Reserve scenario families for held-out testing before selecting thresholds or adapting a model.</p><p>Report errors and uncertainty against independent human reference judgments, including false alarms and missed consequential advice. No held-out results exist in this implementation.</p></section></div>
+  </main>
+  <footer>AstroTrust · Inference interface implemented · Training and deployment remain outside this workflow</footer>
+</body>
+</html>

@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import sqlite3
 from collections.abc import Iterator
-from contextlib import contextmanager
+from contextlib import closing, contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -13,6 +13,15 @@ from astrotrust.collector.models import CaptureMetadata, ManualRun, MetadataRevi
 from astrotrust.validation.files import canonical_json
 
 DEFAULT_DATABASE = Path("data/pilot/manual-runs/collector.sqlite3")
+
+
+def check_store_family(path: Path, forbidden: set[str]) -> None:
+    """Refuse cross-workflow databases before any writable connection or schema creation."""
+    if path.is_file():
+        with closing(sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True)) as db:
+            tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master")}
+        if tables & forbidden:
+            raise ValueError("Use a separate database for consumer and general-purpose captures")
 
 
 class DuplicateCapture(ValueError):
@@ -35,18 +44,8 @@ def identity(run: ManualRun) -> str:
     )
 
 
-class RunStore:
-    def __init__(self, path: Path) -> None:
-        self.path = path
-        path.parent.mkdir(parents=True, exist_ok=True)
-        with self._connect() as db:
-            db.executescript(
-                "CREATE TABLE IF NOT EXISTS runs ("
-                "run_id TEXT PRIMARY KEY, identity TEXT NOT NULL UNIQUE);"
-                "CREATE TABLE IF NOT EXISTS snapshots ("
-                "run_id TEXT NOT NULL REFERENCES runs(run_id), revision INTEGER NOT NULL, "
-                "record TEXT NOT NULL, PRIMARY KEY(run_id, revision));"
-            )
+class SQLiteConnections:
+    path: Path
 
     @contextmanager
     def _connect(self) -> Iterator[sqlite3.Connection]:
@@ -57,6 +56,21 @@ class RunStore:
                 yield db
         finally:
             db.close()
+
+
+class RunStore(SQLiteConnections):
+    def __init__(self, path: Path) -> None:
+        check_store_family(path, {"consumer_runs", "consumer_snapshots"})
+        self.path = path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with self._connect() as db:
+            db.executescript(
+                "CREATE TABLE IF NOT EXISTS runs ("
+                "run_id TEXT PRIMARY KEY, identity TEXT NOT NULL UNIQUE);"
+                "CREATE TABLE IF NOT EXISTS snapshots ("
+                "run_id TEXT NOT NULL REFERENCES runs(run_id), revision INTEGER NOT NULL, "
+                "record TEXT NOT NULL, PRIMARY KEY(run_id, revision));"
+            )
 
     def all(self) -> tuple[ManualRun, ...]:
         with self._connect() as db:

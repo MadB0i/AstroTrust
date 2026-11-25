@@ -20,6 +20,8 @@
   --title: 1.953125rem;
   --radius: 0;
   --motion: 100ms;
+  --target: 44px;
+  --frame: 1440px;
 }
 * {
   box-sizing: border-box;
@@ -143,6 +145,7 @@ summary:hover {
 }
 button:active {
   background: var(--paper);
+  transform: translateY(1px);
 }
 button:disabled {
   opacity: 0.65;
@@ -271,6 +274,7 @@ footer {
 }
 nav {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--s4);
   padding-block: var(--s3);
 }
@@ -278,6 +282,10 @@ nav a {
   min-height: 44px;
   display: inline-flex;
   align-items: center;
+}
+nav a[aria-current="page"] {
+  font-weight: 600;
+  text-decoration-thickness: 2px;
 }
 .workspace {
   display: grid;
@@ -611,5 +619,63 @@ dialog::backdrop {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+}
+.research-ledger {
+  border-top: 3px solid var(--accent);
+  padding-top: var(--s4);
+}
+.study-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: var(--s5);
+  padding-block: var(--s4);
+  border-bottom: 1px solid var(--rule);
+}
+.study-row h3 {
+  display: inline;
+}
+.study-row p {
+  margin-top: var(--s2);
+  margin-bottom: 0;
+}
+.study-row span:not(.step) {
+  display: block;
+  color: var(--ink-3);
+  font-size: var(--small);
+}
+.study-count {
+  display: block;
+  font: var(--title) Georgia, serif;
+  font-variant-numeric: tabular-nums;
+}
+.study-word {
+  display: block;
+  font: var(--heading) Georgia, serif;
+}
+.research-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s6);
+  margin-block: var(--s6);
+}
+.protocol-steps {
+  max-width: 75ch;
+  padding-left: var(--s4);
+}
+.protocol-steps li {
+  padding-left: var(--s2);
+  margin-bottom: var(--s3);
+}
+#status-error:not([hidden]) {
+  padding: var(--s3);
+  background: var(--wash);
+  border-left: 3px solid var(--accent);
+}
+@media (max-width: 600px) {
+  .study-row,
+  .research-notes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s3);
   }
 }

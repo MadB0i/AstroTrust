@@ -19,27 +19,29 @@ from astrotrust.validation.files import load_scenarios
 FRONTENDS = (("OpenAI", "ChatGPT"), ("Anthropic", "Claude"), ("Google", "Gemini"))
 
 
+def code_provenance(root: Path) -> tuple[str | None, bool | None]:
+    """Observe checkout provenance without changing it or inspecting captured content."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True, check=False
+        )
+        dirty = subprocess.run(
+            ["git", "status", "--porcelain"], cwd=root, capture_output=True, text=True, check=False
+        )
+        return (
+            result.stdout.strip() if result.returncode == 0 else None,
+            bool(dirty.stdout) if dirty.returncode == 0 else None,
+        )
+    except FileNotFoundError:
+        return None, None
+
+
 class Collector:
     def __init__(self, root: Path, store: RunStore) -> None:
         self.store = store
         self.scenarios = load_scenarios(root / "benchmark/scenarios")
         self.template = load_template(root / "benchmark/prompts/controlled-v1.json")
-        try:
-            result = subprocess.run(
-                ["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True, check=False
-            )
-            dirty = subprocess.run(
-                ["git", "status", "--porcelain"],
-                cwd=root,
-                capture_output=True,
-                text=True,
-                check=False,
-            )
-            self.code_revision = result.stdout.strip() if result.returncode == 0 else None
-            self.code_worktree_dirty = bool(dirty.stdout) if dirty.returncode == 0 else None
-        except FileNotFoundError:
-            self.code_revision = None
-            self.code_worktree_dirty = None
+        self.code_revision, self.code_worktree_dirty = code_provenance(root)
 
     def prompt(self, scenario_id: str, condition: Condition) -> Prompt:
         scenario = next((s for s in self.scenarios if s.scenario_id == scenario_id), None)
@@ -48,6 +50,8 @@ class Collector:
         return render_prompt(scenario, self.template, condition, research_use=False)
 
     def save(self, request: CaptureRequest) -> ManualRun:
+        if request.metadata.source_category != "general_purpose_llm":
+            raise ValueError("Use the separate consumer collector for consumer astrology services")
         prompt = self.prompt(request.scenario_id, Condition.model_validate(request.condition))
         canonical = prompt.messages[0].content
         if digest(canonical) != request.canonical_prompt_sha256:
@@ -96,7 +100,8 @@ def progress(
     selected = tuple(
         r
         for r in runs
-        if r.canonical_prompt.scenario_id == scenario_id
+        if r.metadata.source_category == "general_purpose_llm"
+        and r.canonical_prompt.scenario_id == scenario_id
         and (scenario_sha256 is None or r.canonical_prompt.scenario_sha256 == scenario_sha256)
         and r.canonical_prompt.condition.emotion == condition.emotion
         and r.canonical_prompt.condition.personalization == condition.personalization

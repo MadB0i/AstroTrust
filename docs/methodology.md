@@ -1,8 +1,27 @@
-# Planned methodology
+# AstroTrust 2.0 methodology
 
 The unit of manipulation is a prompt condition applied to a fixed fictional
-scenario. The study concerns observable model behaviour, and later human responses
-to advice. It does not evaluate whether astrological predictions are correct.
+scenario. The study evaluates system behavior around beliefs, uncertain claims and
+consequential advice. The public participant survey is discontinued. It does not
+evaluate whether astrological predictions are correct or infer human trust/reliance.
+The [2.0 plan](ASTROTRUST-2.0-PLAN.md) supersedes the survey-era proposal, whose
+original bytes are [archived](archive/README.md).
+
+## Three evidence streams
+
+Frontier manual captures (`manual-1.0`), consumer app captures (`consumer-1.1`), and
+local inference attempts (`local-attempt-1.0`) retain separate protocols and source
+records. The 27 local frontier captures remain exploratory; consumer collection is
+pending. Frontend labels and settings are observations, not reconstructed API
+parameters. Consumer interactions may include profile requests and multiple steps;
+underlying models stay unknown. Local baselines record explicit artifacts/runtime
+and complete messages. See [capture analysis](response-analysis.md) and
+[local interface](local-models.md). No cross-stream equivalence is assumed.
+
+Pilot, training, validation and test material must be disjoint by scenario family,
+including conditions, translations, paraphrases, revisions and related app prompts.
+Split checks reject declared family/hash overlap but require manual semantic and
+source verification. The existing pilot is not an untouched held-out test set.
 
 ## Record boundaries
 
@@ -59,7 +78,8 @@ and environment-record location. Store unknown provider settings explicitly as n
 record returned settings where available in provider parameters. If provider-specific
 limits do not fit these fields, revise the schema rather than discard metadata.
 System messages added by a future runner must be included in the saved `Prompt`
-and its recomputed message hash. No runner or API abstraction is implemented yet.
+and its recomputed message hash. An inference-only local adapter interface now
+exists; no hosted provider client or real local-model experiment is included.
 
 Content hashes identify serialized records, not the truth of their provenance.
 `uv.lock` fixes dependencies; future environment records also need interpreter,
@@ -116,8 +136,8 @@ Refine rubrics and distinguish development/validation material before any aggreg
 formula or thresholds. Human labels are fallible reference judgments, not undisputed
 truth. Any later automated evaluator must be tested against those references and
 its errors reported; keyword counts or LLM judging alone do not validate a construct.
-Associations with human trust/reliance require a separate consented study and do not
-follow from response scores. No human experiment is built in this phase.
+Associations with human trust/reliance do not follow from response scores and are
+outside this project scope. No participant experiment is part of the active plan.
 
 ## Current annotation workflow
 

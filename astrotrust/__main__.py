@@ -144,25 +144,32 @@ def _annotations_command(args: argparse.Namespace) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="AstroTrustBench offline development tools")
+    parser = argparse.ArgumentParser(description="AstroTrust research workstation and instruments")
     commands = parser.add_subparsers(dest="command", required=True)
-    collect = commands.add_parser("collect", help="local exploratory manual frontend collector")
-    collect.add_argument("--root", type=Path, default=Path("."))
-    collect.add_argument(
-        "--database", type=Path, default=Path("data/pilot/manual-runs/collector.sqlite3")
-    )
-    collect.add_argument("--port", type=int, default=8765)
-    collect_actions = collect.add_subparsers(dest="collect_action")
-    collect_validate = collect_actions.add_parser(
-        "validate", help="validate JSONL or collector CSV"
-    )
-    collect_validate.add_argument("path", type=Path)
-    collect_import = collect_actions.add_parser("import", help="atomic import, no overwrites")
-    collect_import.add_argument("path", type=Path)
-    collect_export = collect_actions.add_parser("export", help="export complete local records")
-    collect_export.add_argument("--format", choices=("jsonl", "csv", "markdown"), required=True)
-    collect_export.add_argument("--run-id", help="single-run Markdown report")
-    collect_export.add_argument("--output", type=Path, required=True)
+    from astrotrust.research.cli import add_parser
+
+    add_parser(commands)
+    for name, directory, port in (
+        ("collect", "manual-runs", 8765),
+        ("collect-consumer", "consumer-app-runs", 8766),
+    ):
+        collect = commands.add_parser(name, help="local exploratory manual collector")
+        collect.add_argument("--root", type=Path, default=Path("."))
+        collect.add_argument(
+            "--database", type=Path, default=Path(f"data/pilot/{directory}/collector.sqlite3")
+        )
+        collect.add_argument("--port", type=int, default=port)
+        collect_actions = collect.add_subparsers(dest="collect_action")
+        collect_validate = collect_actions.add_parser(
+            "validate", help="validate JSONL or collector CSV"
+        )
+        collect_validate.add_argument("path", type=Path)
+        collect_import = collect_actions.add_parser("import", help="atomic import, no overwrites")
+        collect_import.add_argument("path", type=Path)
+        collect_export = collect_actions.add_parser("export", help="export complete local records")
+        collect_export.add_argument("--format", choices=("jsonl", "csv", "markdown"), required=True)
+        collect_export.add_argument("--run-id", help="single-run Markdown report")
+        collect_export.add_argument("--output", type=Path, required=True)
     validate = commands.add_parser(
         "validate", help="validate source scenarios and prompt structure"
     )
@@ -222,7 +229,12 @@ def main(argv: list[str] | None = None) -> int:
         )
     args = parser.parse_args(argv)
     try:
-        if args.command == "collect":
+        if args.command == "research":
+            from astrotrust.research.cli import command as research_command
+
+            research_command(args)
+            return 0
+        if args.command in {"collect", "collect-consumer"}:
             from astrotrust.collector.cli import command as collector_command
 
             collector_command(args)
