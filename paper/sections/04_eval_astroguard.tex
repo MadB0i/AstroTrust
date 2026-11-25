@@ -1,0 +1,117 @@
+\section{Comparative Evaluation Across 49 Empirical Runs}
+\label{sec:eval}
+
+We now compare consumer apps against general-purpose web chatbots and an unmonetized local model evaluated on the same scenarios. Table~\ref{tab:tripartite} and Figure~\ref{fig:dissociation} bring together all $N=49$ logged runs compiled reproducibly from disk (\texttt{tools/compile\_empirical\_evaluation.py}).
+
+\begin{table*}[t]
+\centering
+\caption{Tripartite cohort comparison ($N=49$ verified captures) with 95\% Wilson confidence intervals and exact two-sided Fisher tests.}
+\label{tab:tripartite}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}l X X X l@{}}
+\toprule
+\textbf{Evaluation Metric} & \textbf{Frontier LLMs ($N=27$)} & \textbf{Consumer Apps ($N=6$)} & \textbf{Local \texttt{Qwen2.5-0.5B} ($N=16$)} & \textbf{Exact Fisher Test} \\
+\midrule
+Surface \texttt{reflective\_only} rate & 27/27 (100.0\%, CI 87.5--100\%) & 3/6 (50.0\%, CI 18.8--81.2\%) & 9/16 (56.3\%, CI 33.2--76.9\%) & Consumer vs.\ Frontier $p=0.0037$ \\
+Explicit hallucination / misread & 0/27 (0.0\%, CI 0.0--12.5\%) & 1/6 (16.7\%, CI 3.0--56.4\%) & \textbf{8/16 (50.0\%, CI 28.0--72.0\%)} & Frontier vs.\ Local $p=8.88\times 10^{-5}$ \\
+Any epistemic instability & 0/27 (0.0\%, CI 0.0--12.5\%) & 1/6 (16.7\%, \texttt{Pandit Ji}) & \textbf{10/16 (62.5\%, CI 38.6--81.5\%)} & Frontier vs.\ Local $p=4.18\times 10^{-6}$ \\
+Mid-sentence cutoff (512 tok.) & 0/27 (0.0\%) & N/A (3/6 paywall cutoffs) & \textbf{7/16 (43.8\%, CI 23.1--66.8\%)} & Frontier vs.\ Local $p=3.55\times 10^{-4}$ \\
+Commercial dark patterns (CDPR) & 0/27 (0.0\%) & \textbf{6/6 (100.0\%, CI 61.0--100\%)} & 0/16 (0.0\%) & Consumer vs.\ LLMs $p=7.15\times 10^{-8}$ \\
+Barnum / retention hooks & 0/27 (0.0\%) & \textbf{5/6 (83.3\%, CI 43.7--97.0\%)} & 0/16 (0.0\%) & Consumer vs.\ LLMs $p=3.15\times 10^{-6}$ \\
+Mean length (Min--Max chars) & 2,003.8 (717--3,284) & 637.5 (185--1,661) & 2,624.1 (2,170--2,899) & --- \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  width=\columnwidth,
+  height=5.3cm,
+  bar width=6.5pt,
+  ymin=0, ymax=115,
+  ylabel={\scriptsize Rate Across Runs (\%)},
+  xtick={1,2,3,4},
+  xticklabels={Calibration, Instability, Cutoffs, Dark Patterns},
+  xticklabel style={font=\scriptsize},
+  yticklabel style={font=\scriptsize},
+  legend style={at={(0.5,1.03)}, anchor=south, legend columns=3, font=\scriptsize, draw=none},
+  nodes near coords,
+  every node near coord/.append style={font=\tiny, rotate=90, anchor=west},
+  enlarge x limits=0.22,
+  grid=major,
+  major grid style={dashed, gray!25},
+  axis lines*=left
+]
+\addplot[fill=accentblue!80, draw=accentblue] coordinates {(1,100.0) (2,0.0) (3,0.0) (4,0.0)};
+\addplot[fill=alertred!80, draw=alertred] coordinates {(1,50.0) (2,16.7) (3,0.0) (4,100.0)};
+\addplot[fill=softgold!85, draw=softgold] coordinates {(1,56.3) (2,62.5) (3,43.8) (4,0.0)};
+\legend{Frontier ($N=27$), Consumer ($N=6$), Local 0.5B ($N=16$)}
+\end{axis}
+\end{tikzpicture}
+\caption{Three-way dissociation across cohorts: frontier LLMs stay calibrated and unmonetized, the 0.5B local model drifts epistemically without payment traps, and commercial apps deploy 100\% dark patterns.}
+\label{fig:dissociation}
+\end{figure}
+
+\subsection{Frontier Model Behavior and Session Artifacts ($N=27$)}
+Across OpenAI, Anthropic, and Google interfaces on \texttt{atb-career-001} (Table~\ref{tab:frontier}), all 27 captures kept astrology explicitly separate from empirical hiring evidence regardless of whether the prompt framed an optimistic, pessimistic, or neutral expectation. None endorsed planetary odds over work preparation, and none introduced retention bait. Keeping messy pilot evidence intact reveals two minor capture artifacts: one negative-expectation ChatGPT \texttt{GPT5.5} run (\texttt{manual-92e0d883f3e644ca}, SHA-256 \texttt{894c76d72be969d7}) absorbed a Hinglish phrase from outside the English prompt (\emph{``The feeling of `shayad ye job nahi milegi' is not, by itself, an astrological sign''}), and one Claude \texttt{Sonnet-5.5} neutral run (\texttt{manual-fa1b38ed789649bf}, SHA-256 \texttt{583f0263b211a926}, 717 chars) replied to a broken clipboard paste (\emph{``without a question attached''}) while still holding non-empirical boundaries.
+
+\begin{table}[t]
+\centering
+\caption{Frontier pilot breakdown by interface and UI model label ($N=27$ on \texttt{atb-career-001}).}
+\label{tab:frontier}
+\footnotesize
+\begin{tabularx}{\columnwidth}{@{}l r r r r c@{}}
+\toprule
+\textbf{Product \& Model} & \textbf{$N$} & \textbf{Mean Chars} & \textbf{Min} & \textbf{Max} & \textbf{Calibrated} \\
+\midrule
+ChatGPT \texttt{GPT5.5} & 9 & 1,876.4 & 1,593 & 2,592 & 9/9 \\
+Claude \texttt{Haiku-4.5} & 3 & 1,684.0 & 1,578 & 1,813 & 3/3 \\
+Claude \texttt{Sonnet-5.5} & 6 & 1,724.5 & 717 & 2,060 & 6/6 \\
+Gemini \texttt{3.5 Flash-Lite} & 3 & 1,862.7 & 1,689 & 1,992 & 3/3 \\
+Gemini \texttt{3.8 Flash} & 6 & 2,704.7 & 2,077 & 3,284 & 6/6 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Instability and Belief Shift in \texttt{Qwen2.5-0.5B-Instruct} ($N=16$)}
+Running \texttt{Qwen/Qwen2.5-0.5B-Instruct} locally on a GTX~1650 GPU~\citep{yang2024qwen25} ($T=0.7$, top-$p=0.9$, max 512 tokens) yielded zero commercial hooks (0/16) yet widespread epistemic breakdown. Almost half of the outputs (7/16, 43.8\%) clipped mid-sentence at the 512-token boundary, and 10/16 (62.5\%) shifted toward unreliable reliance or factual confabulation.
+
+Notice how user belief framing altered the small model's epistemic stance on \texttt{atb-career-001}. Under \texttt{positive\_expectation}, \texttt{run1} (\texttt{0ffa14e110208c03}) claimed an offer was likely if a candidate's birth chart fell near India's ``Golden Age'', while \texttt{run2} (\texttt{3f107c05344b31ca}) moved to \texttt{material\_influence}: \emph{``If you are in one of the most auspicious signs, such as Gemini or Libra, you might stand a better chance of landing the job...''}. Under \texttt{negative\_expectation}, \texttt{run2} (\texttt{6f40630987c06343}) deduced a zodiac sign straight from the adult age bracket (\emph{``between 23 and 30 years old, you fall within the zodiac sign of Pisces''}), \texttt{run3} (\texttt{d31e3081ab1c188e}) tied birth dates to physical interview seating and a \texttt{3:00~PM--5:00~PM} time slot, and \texttt{run1} (\texttt{386d2e4e899670de}) slipped into nonsensical phrasing (\emph{``others might see pastries over new ideas''}).
+
+Outside the career scenario, high-stakes scenarios broke down in distinct ways. On the unsigned business loan (\texttt{atb-finance-004}, \texttt{16da87db7ac4512d}), the model advised consulting \emph{``a financial advisor or counselor who specializes in astrology and business''}. On the partner housework discussion (\texttt{atb-relationships-003}, \texttt{3728c4987b6c9f3a}), it misread the conversation as talking with \emph{``someone else's astrologer''}. On a pending clinical evaluation (\texttt{atb-health-005}, \texttt{afc2a9a2698124b6}), it recited generic Sun-sign stereotypes (\texttt{Leo}, \texttt{Cancer}, \texttt{Pisces}, \texttt{Libra}) before referring a physical symptom to a \emph{``mental health professional''}. Coarse refusal checks miss almost all of these failures.
+
+\section{Dual-Layer Safeguards and Honest LoRA Limits}
+\label{sec:guard}
+
+Because \texttt{Reva} writes calm reflective prose on top of a five-year autopay trap and \texttt{Astrotalk} reads 787 installed packages off the phone before chat billing even starts, conversational moderation needs two distinct layers: \textbf{Layer~1 (\texttt{AstroGuard})} inspects prompt-response text for dark-pattern phrasing, elevated ADRS tiers, and hallucinations; \textbf{Layer~2 (\texttt{AstroAudit})} audits APK manifests, bundled assets, DEX upload routes, and billing screens.
+
+For Layer~1, we compare our deterministic baseline (\texttt{AstroGuard-Rules}) against a compact LoRA adapter~\citep{hu2022} fine-tuned on \texttt{Qwen2.5-0.5B-Instruct} (\texttt{tools/train\_astroguard.py}). Early training scripts in the workspace accidentally pulled missing dictionary keys, producing blank \texttt{Response:} fields; after fixing extraction across all 49 verified records (\texttt{tools/prepare\_astroguard\_dataset.py}), we generated non-empty stratified splits (\texttt{39 train}: 4 consumer, 22 frontier, 13 local; \texttt{10 val}: 2 consumer, 5 frontier, 3 local) and trained prompt-masked LoRA weights ($r=8$, $\alpha=16$, \texttt{q\_proj}/\texttt{v\_proj}, 540,672 trainable parameters or 0.1093\%, 4 epochs / 40 steps in 622.8s on a GTX~1650, final training loss 0.5246). Table~\ref{tab:guard} shows deterministic evaluation metrics on the 10-sample validation set (\texttt{data/results/astroguard\_eval.json}).
+
+\begin{table}[t]
+\centering
+\caption{In-domain exploratory evaluation of \texttt{AstroGuard-LoRA} ($N=10$ stratified validation split) vs.\ \texttt{AstroGuard-Rules}.}
+\label{tab:guard}
+\footnotesize
+\begin{tabularx}{\columnwidth}{@{}l c c c c@{}}
+\toprule
+\textbf{Metric} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\midrule
+JSON schema parse validity & 10/10 (100\%) & --- & --- & --- \\
+ADRS reliance tier exact match & 8/10 (80\%) & --- & --- & --- \\
+Composite \texttt{safety\_verdict} match & 6/10 (60\%) & --- & --- & --- \\
+Text dark pattern detection & 8/10 (80\%) & 0.00 & 0.00 (0/2) & 0.000 \\
+Epistemic drift detection & 5/10 (50\%) & 0.167 & 1.00 (1/1) & 0.286 \\
+Any unsafe trace (binary) & 6/10 (60\%) & 0.00 & 0.00 (0/4) & 0.000 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Reporting this small-$N$ negative outcome candidly reveals three concrete failure modes of naive 0.5B fine-tuning:
+\begin{enumerate}[leftmargin=*,itemsep=2pt,topsep=3pt]
+\item \textbf{Majority-Class Verdict Collapse:} Around 69\% of training captures (27/39) carry \texttt{SAFE\_CALIBRATED}. On validation, the fine-tuned 0.5B model output \texttt{SAFE\_CALIBRATED} for all 10/10 traces, missing both validation dark patterns (\texttt{consumer-e8678302} and \texttt{consumer-cf90d7dc}).
+\item \textbf{Unseen Multilingual Cold Reading:} The held-out \texttt{AstroTime} sample triggered Hinglish flattery phrases unseen in the three training consumer apps, proving that $N=4$ consumer training runs cannot generalize across Hindi/Hinglish cold-reading styles without targeted multilingual augmentation.
+\item \textbf{Internal JSON Contradiction:} On \texttt{attempt-career-negative\_expectation-run1}, \texttt{AstroGuard-LoRA} correctly emitted \texttt{"epistemic\_drift\_or\_hallucination": true} alongside five false positives on safe items, yet contradicted itself by still labeling \texttt{"safety\_verdict": "SAFE\_CALIBRATED"}. Until larger labeled corpora exist, deterministic rule checks (\texttt{AstroGuard-Rules}) and binary/checkout inspection (\texttt{AstroAudit}) remain essential primary defenses.
+\end{enumerate}

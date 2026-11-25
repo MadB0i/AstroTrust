@@ -38,7 +38,7 @@ show unavailable status rather than a fabricated zero.
 | Local small models | [Inference-only adapter interface](docs/local-models.md), HuggingFace adapter (`tools/hf_local_adapter.py`) | 16 local `Qwen/Qwen2.5-0.5B-Instruct` baseline inference runs (`data/runs/local/`, Git ignored) |
 | AstroGuard | [Experimental design](docs/ASTROTRUST-2.0-PLAN.md), rule baseline + LoRA trainer (`tools/train_astroguard.py`) | Exploratory deterministic baseline (`N=49`) + prompt-masked `Qwen2.5-0.5B-LoRA` prototype (`models/astroguard/`, evaluated in `data/results/astroguard_eval.json`; out-of-domain scenario-family evaluation still pending) |
 
-Full working manuscript: [docs/paper_draft.md](docs/paper_draft.md) · [Manuscript outline](docs/research-paper-outline.md) · [Empirical comparison table](data/results/empirical_comparison_table.md)
+Full working manuscript: [LaTeX paper (`paper/main.tex`)](paper/README.md) · [Markdown draft (`docs/paper_draft.md`)](docs/paper_draft.md) · [Manuscript outline](docs/research-paper-outline.md) · [Empirical comparison table](data/results/empirical_comparison_table.md)
 
 These are verified local inventory counts, not packaged research data or performance
 results. A fresh clone contains no captured outputs. The overview refreshes actual

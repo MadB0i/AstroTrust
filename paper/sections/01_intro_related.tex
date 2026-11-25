@@ -1,0 +1,52 @@
+\begin{abstract}
+When users ask consumer AI astrology apps for guidance on job offers, loans, or health symptoms, textual disclaimers are only half the story. We audit conversational behavior alongside mobile billing flows and compiled Android binaries in India under the AstroTrust~2.0 framework. Across $N=49$ logged sessions (27 frontier model captures across OpenAI ChatGPT \texttt{GPT5.5}, Anthropic Claude \texttt{Haiku-4.5} and \texttt{Sonnet-5.5}, Google Gemini \texttt{3.5 Flash-Lite} and \texttt{3.8 Flash}; 6 live sessions on 5 Indian commercial astrology apps: \texttt{Astrotalk}, \texttt{Pandit Ji}, \texttt{Reva}, \texttt{AstroSage Kundli}, and \texttt{AstroTime}; and 16 local runs of \texttt{Qwen2.5-0.5B-Instruct}), a clear three-way split emerges. Frontier models hold firm epistemic boundaries (27/27) with zero commercial hooks. The unmonetized 0.5B local baseline adds zero payment pressure yet fails epistemically, producing explicit zodiac or prompt errors in 8/16 runs (50.0\%) and mid-sentence token cutoffs in 7/16 (43.8\%). Meanwhile, half of our consumer app sessions (3/6) emit reasonable disclaimers in chat, telling users to trust their own interview prep, even while 6/6 sessions (100\%, two-sided Fisher $p = 7.15 \times 10^{-8}$ against unmonetized models) wrap the conversation in coercive dark patterns under India's CCPA 2023 rules: a INR~1 payment quietly binding a 5-year INR~699 UPI Autopay mandate (\texttt{Reva}), INR~5/min to INR~19/min post-session rate surges stranding INR~15 wallet balances (\texttt{Astrotalk}), and byte-identical 16-second audio hooks under mismatched avatars (\texttt{Astrotalk} and \texttt{Pandit Ji}). Static APK decompilation explains how \texttt{Astrotalk} (\texttt{v1.1.545}) profiles user vulnerability: \texttt{assets/apppackges.json} enumerates 787 target apps, 100\% of which are mirrored into \texttt{AndroidManifest.xml} \texttt{<queries>} (823 tags, 804 unique IDs) to inspect device inventories without requesting \texttt{QUERY\_ALL\_PACKAGES}, and \texttt{ExternalPackageTracker} uploads hits to \texttt{user/apps/installed}. Comparing \texttt{Astrotalk} against its sister clone \texttt{Pandit Ji} (6,193 overlapping ZIP paths, zero package tracker, 26 manifest queries) isolates this surveillance engine as a deliberate product addition rather than SDK residue. Evaluating a retrained 0.5B LoRA guard model on non-empty traces confirms why text-only filters miss unseen Hindi cold reading and billing traps unless paired with static APK checks.
+\end{abstract}
+
+\section{Introduction}
+
+Millions of Indian smartphone users now open horoscope and Kundali applications when they face uncertain decisions about employment, debt, marriage, and medical care. Major platforms have replaced long queues for human astrologers with conversational bots marketed as instant ``AI astrologers'', mixing ephemeris math, streaming chat completions, and synthetic voice notes.
+
+Standard AI safety benchmarks test whether a model hallucinates facts or flatters false user assumptions inside an isolated text box. That setup breaks down when applied to paid consumer apps. If an app prints a cautious paragraph telling an applicant to focus on interview preparation, text evaluators mark the model safe. What those evaluators never see is the INR~1 checkout screen that just registered a five-year UPI Autopay mandate, the 16-second voice note stalling the answer behind a INR~19/min paywall, or the background routine scanning the user's phone for loan, gambling, fertility, and dating apps.
+
+This paper brings those hidden software layers into the same audit frame as model completions. We evaluate three model cohorts in parallel: web frontier chatbots ($N=27$), live Indian commercial apps ($N=6$), and a local small open-weight baseline ($N=16$), alongside disassembly of five downloaded APKs. Every claim implied by our title maps to a concrete measurement: epistemic reliance tiers and belief-conditioned shifts across matched prompts, logged commercial dark patterns cross-referenced against Indian consumer law, and binary-level evidence of installed-app harvesting.
+
+\begin{table}[t]
+\centering
+\caption{Claim-to-evidence traceability across our study.}
+\label{tab:proofmap}
+\footnotesize
+\begin{tabularx}{\columnwidth}{@{}l X l@{}}
+\toprule
+\textbf{Title Component} & \textbf{Observed Evidence on Disk} & \textbf{Section} \\
+\midrule
+Calibration vs.\ safety & 3/6 consumer texts give safe disclaimers yet 6/6 deploy payment traps ($p=7.15\times 10^{-8}$) & \S\ref{sec:consumer}, \S\ref{sec:eval} \\
+Epistemic reliance & ADRS tiers + 10/16 \texttt{Qwen2.5-0.5B} instability across 8 India scenarios ($p=4.18\times 10^{-6}$) & \S\ref{sec:bench}, \S\ref{sec:eval} \\
+Monetization traps & SHA-256 transcripts, INR~1--699 UPI mandate, surge logs, \texttt{FLAG\_SECURE} & \S\ref{sec:consumer} \\
+App harvesting & \texttt{apppackges.json} (787 IDs), 787/787 in \texttt{<queries>}, DEX tracker vs.\ clone diff & \S\ref{sec:apk} \\
+India scope & India scenarios, INR/UPI flows, Hindi/Hinglish logs, CCPA~2023 \& RBI~2022 & \S\ref{sec:related}--\S\ref{sec:policy} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+We make four grounded contributions:
+\begin{enumerate}[leftmargin=*,itemsep=2pt,topsep=3pt]
+\item \textbf{Tripartite Empirical Dataset ($N=49$):} We collect cryptographically hashed responses across frontier web models, paid and trial consumer apps in India, and reproducible local inference runs under shared scenario prompts.
+\item \textbf{Dark-Pattern Mapping to Indian Law:} We document six live consumer sessions (\texttt{consumer-1.1} schema) and tie each UI, audio, pricing, and checkout tactic directly to the 2023 guidelines issued by India's Central Consumer Protection Authority (CCPA).
+\item \textbf{APK Surveillance Disassembly and Natural Experiment:} We reverse-engineer \texttt{Astrotalk}'s 787-app package list, Android~11 \texttt{<queries>} bypass, and Retrofit upload calls, then contrast them against its sister app \texttt{Pandit Ji} to rule out third-party SDK accidents.
+\item \textbf{Dual-Layer Auditor and Honest Baseline Limits:} We repair and benchmark \texttt{AstroGuard}, releasing both deterministic audit rules and a retrained 0.5B LoRA prototype whose failure modes demonstrate why conversational filters alone cannot protect mobile users.
+\end{enumerate}
+
+\section{Background and Indian Regulatory Context}
+\label{sec:related}
+
+\paragraph{Astrology and Personal Validation.}
+Empirical scrutiny of natal chart matching goes back decades. \citet{carlson1985} ran a double-blind test designed with professional astrological bodies and found astrologers matched birth charts to California Psychological Inventory profiles at 34\% accuracy against a 33.3\% random baseline, even when claiming peak confidence. Earlier, \citet{forer1949} handed college students identical personality sketches stitched together from horoscope columns; students rated the vague text 4.26 out of 5 for personal accuracy. Automated horoscope chat turns this Barnum-Forer dynamic into a per-minute retention loop.
+
+\paragraph{LLM Sycophancy and Preference Bias.}
+Modern alignment pipelines risk reproducing that flattery for different reasons. \citet{perez2023} observed that larger RLHF-trained models increasingly echo a user's stated political or factual premise. \citet{sharma2024} traced this agreement bias back to human annotator preferences embedded inside reward models: when a user signals a desired answer, models often abandon neutral grounding to validate it. In India, where cultural openness to astrology meets high-stakes career or loan anxiety, sycophantic validation carries direct financial costs.
+
+\paragraph{Dark Patterns and India's CCPA 2023 Framework.}
+\citet{gray2018} grouped manipulative interfaces into five strategies: nagging, obstruction, sneaking, interface interference, and forced action. Auditing roughly 11,000 e-commerce storefronts, \citet{mathur2019} cataloged 1,818 dark-pattern deployments including countdown urgency and hidden subscriptions. On November 30, 2023, India's Central Consumer Protection Authority codified 13 actionable dark patterns under the Consumer Protection Act, 2019~\citep{ccpa2023}, expressly covering \emph{Subscription Traps}, \emph{Drip Pricing}, \emph{Bait and Switch}, \emph{False Urgency}, \emph{Interface Interference}, and \emph{Disguised Advertisements}.
+
+\paragraph{Android Package Visibility and Installed-App Profiling.}
+A static list of apps installed on a phone reveals remarkably intimate traits. \citet{seneviratne2014} showed that an app-installation snapshot predicts user gender with roughly 70\% accuracy alongside inferred income and lifestyle proxies. Starting with Android~11 (API level~30), Google restricted \texttt{PackageManager.getInstalledPackages()} behind package visibility filtering~\citep{androidqueries2020}. Developers wanting broad visibility must seek Google Play Console approval for the restricted \texttt{QUERY\_ALL\_PACKAGES} permission, normally limited to file managers or antivirus software, or declare explicit targets inside \texttt{AndroidManifest.xml} \texttt{<queries>} tags. In parallel, the Reserve Bank of India's Digital Lending Guidelines~\citep{rbi2022} barred regulated lending apps from harvesting installed-app lists or contact books. Consumer astrology apps sit outside RBI supervision yet inspect overlapping financial and debt telemetry.

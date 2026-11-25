@@ -1,0 +1,55 @@
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.72in,top=0.8in,bottom=0.82in,columnsep=0.22in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{balance}
+
+\definecolor{accentblue}{RGB}{32,78,138}
+\definecolor{alertred}{RGB}{172,44,44}
+\definecolor{slategray}{RGB}{90,98,108}
+\definecolor{softgold}{RGB}{196,138,24}
+
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.14}
+
+\title{\Large\bfseries Calibration Without Safety: Auditing Epistemic Reliance, Monetization Dark Patterns, and Installed-App Harvesting in AI Astrology Apps in India}
+
+\author{
+  MadB0i\\
+  AstroTrust Research Collective\\
+  \texttt{https://github.com/MadB0i/AstroTrust}
+}
+
+\date{November 2026 (Working Research Paper)}
+
+\begin{document}
+
+\maketitle
+
+\input{sections/01_intro_related}
+\input{sections/02_benchmark_apps}
+\input{sections/03_apk_forensics}
+\input{sections/04_eval_astroguard}
+\input{sections/05_discussion_appendix}
+
+\balance
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

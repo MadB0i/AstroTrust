@@ -1,6 +1,7 @@
 # Working manuscript outline — AstroTrust 2.0
 
-* **Full working manuscript:** [paper_draft.md](paper_draft.md)
+* **Publication-ready LaTeX source:** [paper/main.tex](../paper/main.tex) ([Build guide](../paper/README.md))
+* **Full working markdown draft:** [paper_draft.md](paper_draft.md)
 * **Empirical benchmark tables:** [empirical_comparison_table.md](../data/results/empirical_comparison_table.md) ([GitHub](https://github.com/MadB0i/AstroTrust/blob/main/data/results/empirical_comparison_table.md))
 * **Static APK forensic summary:** [apk_forensic_summary.json](../data/results/apk_forensic_summary.json) ([GitHub](https://github.com/MadB0i/AstroTrust/blob/main/data/results/apk_forensic_summary.json))
 * **Repository:** https://github.com/MadB0i/AstroTrust

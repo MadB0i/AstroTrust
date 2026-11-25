@@ -1,0 +1,43 @@
+\section{Limitations, Scope Boundaries, and Policy Proposals}
+\label{sec:policy}
+
+\paragraph{Methodological Limits.}
+Our findings carry four clear boundaries. First, our live consumer audit covers $N=6$ sessions across 5 Indian apps, and our human coding reflects single-researcher deterministic inspection rather than independent multi-rater adjudication with $\kappa/\alpha$ reliability estimates. Second, because all consumer and frontier captures center on the \texttt{atb-career-001} scenario family, the 10-sample \texttt{AstroGuard-LoRA} evaluation measures in-domain behavior only rather than held-out cross-domain generalization over financial or clinical scenarios. Third, static APK reverse-engineering establishes client-side collection and upload (\texttt{POST user/apps/installed} and \texttt{save/user-upi-apps}) rather than server-side pricing formulas; only backend access or regulatory discovery can determine whether uploaded app lists alter dynamic per-minute quotes or chatbot prompts. Fourth, downloading \texttt{AstroSage AI.apk} yielded a zero-byte artifact, restricting our audit of that platform to live UI capture (\texttt{consumer-9a013e2c}).
+
+\paragraph{Governance Recommendations for India.}
+\begin{itemize}[leftmargin=*,itemsep=2pt,topsep=3pt]
+\item \textbf{Close the Android \texttt{<queries>} Loophole:} App stores should apply \texttt{QUERY\_ALL\_PACKAGES}-equivalent policy review whenever an app declares large enumerated \texttt{<queries>} blocks (e.g., $>50$ unrelated consumer packages), preventing vulnerability catalogs like \texttt{Astrotalk}'s 787-app list from bypassing Play visibility safeguards.
+\item \textbf{Enforce CCPA Rules on Nominal-Fee UPI Mandates:} Offering an introductory \texttt{INR~1} consultation screen that registers a multi-year \texttt{INR~699} recurring UPI Autopay mandate warrants direct scrutiny under India's CCPA \emph{Subscription Trap} and \emph{Bait and Switch} provisions, alongside upfront per-minute rate locks to stop post-session surges stranding wallet balances.
+\item \textbf{Restrict Anti-Audit \texttt{FLAG\_SECURE} Blocks:} Operating systems and consumer regulators should limit screenshot blocking (\texttt{FLAG\_SECURE}) to OTP, PIN, and payment-entry views rather than AI consultation transcripts so users and auditors can document financial or medical claims made inside paid chats.
+\end{itemize}
+
+\section{Reproducibility and Cryptographic Appendix}
+\label{sec:repro}
+
+All code, benchmark scenario JSON schemas, and verification scripts are maintained publicly at \texttt{https://github.com/MadB0i/AstroTrust} and validated continuously offline via \texttt{pytest} (238 passing tests), \texttt{ruff}, \texttt{mypy --strict}, scenario schema checks, and doc-link verification. In compliance with third-party platform terms and repository governance, raw commercial/frontier transcripts and third-party APKs are kept out of Git while deterministic compilation tables, rule sets, compact LoRA weights (\texttt{models/astroguard/}), and SHA-256 digests remain reproducible.
+
+\begin{table}[h]
+\centering
+\caption{Full SHA-256 verification digests for audited APKs and live consumer app transcripts.}
+\label{tab:hashes}
+\scriptsize
+\begin{tabularx}{\columnwidth}{@{}l X@{}}
+\toprule
+\textbf{Artifact / Run ID} & \textbf{SHA-256 Digest (Verified Local Store / Binary)} \\
+\midrule
+\texttt{Astrotalk.apk} (89.91~MB) & \texttt{527331d1c60a953cb0a9613438e967f398d970e9767349f0cbccfbd56ecffe3d} \\
+\texttt{Pandit Ji.apk} (97.03~MB) & \texttt{d08a504021748671f03df7b6cc21d18fd6dbb1e73ef6ae0c369b71dc42b1b647} \\
+\texttt{Reva.apk} (38.41~MB) & \texttt{d399c180003c497cb4dec8b3543c28f162fe425e24e4e0051ee7a25805ae28e7} \\
+\texttt{AstroTime.apk} (25.76~MB) & \texttt{0ff2c9d297cf548f656db975b2a16dd49d49d3588e871b4b8a25777b041049ef} \\
+\midrule
+\texttt{consumer-3e64123e...} & \texttt{ff527ec9d792af2e4f27791e81199cfba056e7c72d6503478d1636f3830e1fa2} \\
+\texttt{consumer-e8678302...} & \texttt{0f6505484b9c23b9b53c0f5149230ddbbeffbaabbc892caba079b8c7cfad33b0} \\
+\texttt{consumer-8b195395...} & \texttt{df00a53e65c7729d3e5615445ddb9f83eb37a0d72cb5bf533548e03134d25db9} \\
+\texttt{consumer-ce82020d...} & \texttt{cf6e7b954829b77a1a9b3a64edc5ccffc3a1473de77df6074d7b593ee516dfe2} \\
+\texttt{consumer-9a013e2c...} & \texttt{fcdf62cada94733c705a2309e1fc7cd58b610d0b89c3c0a46f31e818f7008e3a} \\
+\texttt{consumer-cf90d7dc...} & \texttt{039f4e725916b107f4096099e190fd471e959c24ff4260f559237e2d9c227eb9} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+All empirical experiments were executed on fictional synthetic profiles without human participants; commercial app transactions used minimal single-session test amounts (INR~1 and INR~11.81) with subsequent mandate revocation where applicable.

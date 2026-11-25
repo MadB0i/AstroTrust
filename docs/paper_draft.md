@@ -1,15 +1,15 @@
 # Surface Calibration, Predatory Funnels, and Device Surveillance: An Empirical Audit of Epistemic Reliance, Dark Patterns, and Privacy Harvesting in AI Astrology Applications
 
 **Author:** MadB0i (AstroTrust Research Collective)  
-**Repository:** [https://github.com/MadB0i/AstroTrust](https://github.com/MadB0i/AstroTrust) · [Overview](../README.md) · [Paper Outline](research-paper-outline.md)  
+**Repository:** [https://github.com/MadB0i/AstroTrust](https://github.com/MadB0i/AstroTrust) · [Overview](../README.md) · [LaTeX Manuscript](../paper/README.md) · [Paper Outline](research-paper-outline.md)  
 **Benchmark Version:** AstroTrust 2.0 (`instrument-v0.1`, `manual-1.0`, `consumer-1.1`, `local-attempt-1.0`)  
-**Status:** Exploratory Working Manuscript (November 2026)
+**Status:** Exploratory Working Manuscript (November 2026; Overleaf/TeX source in [paper/main.tex](../paper/main.tex))
 
 ---
 
 ## Abstract
 
-Conversational AI avatars and LLM-backed horoscopes have turned digital astrology into a rapidly scaling consumer AI vertical in South Asia and globally. When users consult these systems on high-stakes life decisions—such as job interviews, business loans, clinical symptoms, or city relocations—AI safety requires more than polite epistemic disclaimers: products must neither encourage non-empirical decision reliance nor deploy predatory monetization and covert surveillance against vulnerable users.
+Conversational AI avatars and LLM-backed horoscopes have turned digital astrology into a rapidly scaling consumer AI vertical in India. When users consult these systems on high-stakes life decisions—such as job interviews, business loans, clinical symptoms, or city relocations—AI safety requires more than polite epistemic disclaimers: products must neither encourage non-empirical decision reliance nor deploy predatory monetization and covert surveillance against vulnerable users.
 
 In this study, we introduce **AstroTrust 2.0**, an empirical benchmark and multi-layer audit combining controlled black-box prompt evaluation across **49 empirical sessions**—general-purpose frontier models ($N=27$; OpenAI ChatGPT `GPT5.5`, Anthropic Claude `Haiku-4.5` and `Sonnet-5.5`, Google Gemini `3.5 Flash-Lite` and `3.8 Flash`), commercial Android consumer astrology apps ($N=6$ live sessions across Astrotalk, Pandit Ji, Reva by ShareChat, AstroSage Kundli, and AstroTime), and a local small open-weight baseline ($N=16$; `Qwen/Qwen2.5-0.5B-Instruct`)—with static forensic reverse-engineering of commercial Android APKs.
 
@@ -25,7 +25,7 @@ Finally, we release **AstroGuard**, an exploratory dual-layer safety prototype c
 
 ## 1. Introduction
 
-Generative artificial intelligence has shifted rapidly from general-purpose web chat interfaces into vertically specialized consumer mobile products. In South Asia and globally, digital astrology represents one of the highest-grossing consumer application categories, combining conversational large language models (LLMs), synthetic text-to-speech (TTS) voice notes, prerecorded video avatars, and real-time ephemeris chart calculators to sell "24/7 AI astrologer" consultations on per-minute or recurring subscription billing.
+Generative artificial intelligence has shifted rapidly from general-purpose web chat interfaces into vertically specialized consumer mobile products. Across India, digital astrology represents one of the highest-grossing consumer application categories, combining conversational large language models (LLMs), synthetic text-to-speech (TTS) voice notes, prerecorded video avatars, and real-time ephemeris chart calculators to sell "24/7 AI astrologer" consultations on per-minute or recurring subscription billing.
 
 Evaluating AI safety in these commercial deployments raises a challenge neglected by standard NLP benchmarks: **a model's conversational text may pass epistemic safety checks while the product surrounding it financially and psychologically exploits the user.** Consider an applicant preparing for a consequential job interview or a small-business borrower weighing a large loan. Prior safety evaluations typically inspect isolated LLM text completions for overt hallucinations or sycophancy. However, inside consumer mobile ecosystems, text generation sits downstream of onboarding funnels, metered countdown timers, audio cliffhangers, recurring UPI autopay flows, anti-screenshot locks (`FLAG_SECURE`), and background device-profiling modules.
 
