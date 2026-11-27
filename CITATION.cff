@@ -1,16 +1,40 @@
 cff-version: 1.2.0
-message: "Please cite this repository when using AstroTrustBench; no paper is published here yet."
-title: "AstroTrust: research foundation for AstroTrustBench"
-authors:
-  - name: "MadB0i"
-    website: "https://github.com/MadB0i"
+title: "Calibration Without Safety: Auditing Epistemic Reliance, Dark Patterns, and App Harvesting in Indian AI Astrology Apps"
+message: "If you use AstroTrust 2.0, its evaluation instruments, or findings from the paper, please cite this work using the metadata below."
 type: software
-version: 0.1.0.dev0
+authors:
+  - family-names: "Talukdar"
+    given-names: "Rupjyoti"
+    affiliation: "Independent Researcher, AstroTrust Research Collective"
+    email: "contact.rupjyoti26@gmail.com"
+    orcid: "https://orcid.org/0009-0003-4755-2531"
+date-released: 2026-11-27
+version: "2.0.0"
 repository-code: "https://github.com/MadB0i/AstroTrust"
 url: "https://github.com/MadB0i/AstroTrust"
-license: MIT
-abstract: "Work-in-progress instruments for controlled studies of model behaviour around astrological beliefs."
-# Attribution uses the verified repository-owner handle, without inferring a real name.
-# Personal author attribution and release dates require maintainer confirmation.
-# No DOI or preferred publication citation is asserted.
-# Internal research checkpoint: instrument-v0.1; no published benchmark release.
+license: "MIT"
+abstract: >-
+  AstroTrust 2.0 audits AI astrology systems across conversational epistemic calibration,
+  commercial dark patterns under India's CCPA 2023 framework, static Android APK forensics,
+  and live Android 14 proxy telemetry across N=93 sessions, five commercial Android binaries,
+  and non-circular N=44 safeguard benchmarks.
+keywords:
+  - ai-safety
+  - dark-patterns
+  - android-privacy
+  - epistemic-calibration
+  - india
+  - ccpa-2023
+  - dpdp-2023
+preferred-citation:
+  type: article
+  title: "Calibration Without Safety: Auditing Epistemic Reliance, Dark Patterns, and App Harvesting in Indian AI Astrology Apps"
+  authors:
+    - family-names: "Talukdar"
+      given-names: "Rupjyoti"
+      affiliation: "Independent Researcher, AstroTrust Research Collective"
+      email: "contact.rupjyoti26@gmail.com"
+      orcid: "https://orcid.org/0009-0003-4755-2531"
+  year: 2026
+  month: 11
+  url: "https://github.com/MadB0i/AstroTrust"

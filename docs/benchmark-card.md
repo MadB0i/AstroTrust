@@ -1,10 +1,6 @@
 # AstroTrustBench early benchmark card
 
-**Status:** instrument-v0.1; software 0.1.0.dev0; controlled record schema 1.0;
-development fixtures. The local collector has 27 exploratory frontier captures,
-preserved separately under manual-1.0; consumer collection is pending. No validated
-performance results or independent linguistic/construct validation are claimed.
-AstroTrust 2.0 changes research scope without changing this instrument's identity.
+**Status:** instrument-v0.1; software 0.1.0.dev0; controlled record schemas `manual-1.0`, `consumer-1.1`, and `local-attempt-1.0`. The verified workspace corpus contains **93** exploratory captures across three cohorts: 27 frontier web captures (`atb-career-001`), 6 live consumer sessions across 5 Indian Android apps (`Astrotalk`, `Pandit Ji`, `Reva`, `AstroSage`, `AstroTime`) paired with static binary forensics across all 5 non-empty APKs (`data/results/apk_forensic_summary.json`) and a live `mitmproxy` emulator protocol (`CAPTURE_PROTOCOL.md`), plus 60 local open-weight runs (`30` `Qwen2.5-0.5B-Instruct` and `30` `Qwen2.5-1.5B-Instruct`) spanning all 8 India scenarios × 3 belief frames. AstroTrust 2.0 expands empirical evaluation without changing `instrument-v0.1` scenario IDs; non-circular `AstroGuard` evaluation uses 44 manually audited unseen cross-domain and `1.5B` runs (`data/astroguard/heldout_unseen_labeled.jsonl`).
 The previous card is [archived](archive/README.md).
 
 **Purpose and intended use:** develop a controlled instrument to examine differences
@@ -37,15 +33,17 @@ annotations. A small synthetic set can support overstated generalizations. Regex
 privacy screening is incomplete. Reviewers may find some advice distressing.
 
 **Known limitations:** coarse adult profiles; no tradition-specific or birth-chart
-context; only one fixture per domain; English-only text; unknown annotation reliability;
-unvalidated stakes taxonomy and constructs; no human trust/reliance measurements.
-The tool cannot verify that reviewer declarations correspond to an adequate process.
-The collected career pilot provides bounded exploratory response evidence; it
-does not establish representative behavior, validated scores or real-world impact.
-The draft annotation handbook and two pending construction-review bundles are available,
-but no independent reviews or agreement estimates have been collected. The health
-fixture's revision 2 clarifies its opposing expectations; eight base scenarios remain.
-See the [instrument audit](instrument-audit.md) and [expansion gate](scale-up-gate.md).
+context; eight fictional English scenarios with Hindi/Assamese translations pending;
+unknown multi-rater reliability (blind 40-unit coder packet exportable via
+`tools/export_blind_coding_batch.py`, independent second-coder Cohen's kappa still
+pending human annotation); unvalidated stakes taxonomy; no human trust measurements.
+Frontier and consumer sessions center on `atb-career-001`, whereas local `0.5B` and
+`1.5B` baselines cover all 8 domains × 3 belief contrasts. Consumer packet capture on an
+isolated Android 14 emulator verified `POST /AstrotalkPayments/user/save/user-upi-apps`
+in unauthenticated guest mode; authenticated `user/apps/installed` transmission awaits
+a test login session.
+See the [instrument audit](instrument-audit.md), [capture protocol](CAPTURE_PROTOCOL.md),
+and [expansion gate](scale-up-gate.md).
 
 **Future validation:** independent cultural and subject-context review, translation
 adjudication, confound checks, balanced sampling, preregistration, replicated runs,

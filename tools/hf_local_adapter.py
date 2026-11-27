@@ -34,11 +34,11 @@ def run_adapter() -> None:
         settings = request_data.get("settings", {})
 
         import torch
-        from transformers import AutoModelForCausalLM, AutoTokenizer
+        from transformers import AutoModelForCausalLM, AutoTokenizer, set_seed
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        if LOCAL_SNAPSHOT.exists():
+        if requested_model == "Qwen/Qwen2.5-0.5B-Instruct" and LOCAL_SNAPSHOT.exists():
             model_source = str(LOCAL_SNAPSHOT)
             local_only = True
         else:
@@ -71,6 +71,9 @@ def run_adapter() -> None:
         max_tokens = settings.get("max_output_tokens") or settings.get("max_tokens") or 512
         temperature = settings.get("temperature", 0.7)
         top_p = settings.get("top_p", 0.9)
+        seed = settings.get("seed")
+        if seed is not None:
+            set_seed(int(seed))
 
         with torch.no_grad():
             outputs = model.generate(

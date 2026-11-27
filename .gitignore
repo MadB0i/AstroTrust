@@ -19,3 +19,32 @@ reviews/submissions/
 reviews/generated/
 
 data/astroguard/*.jsonl
+data/captures/*
+!data/captures/README.md
+
+# Binary packages, unredacted captures, and local archives (Section 10 boundary)
+*.apk
+*.aab
+*.flow
+*.mitm
+*.har
+*.sqlite
+*.sqlite3
+*.db
+*.zip
+
+# LaTeX intermediate build artifacts (keep paper/main.pdf and paper/figures/)
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+!paper/main.pdf
+!paper/figures/*.pdf
+!paper/figures/*.png

@@ -1,123 +1,79 @@
 # AstroTrust 2.0
 
-**Independent research in progress. Evidence collection is exploratory; no validated
-benchmark scores or published findings are claimed.**
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0003--4755--2531-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0003-4755-2531)
+[![Paper PDF](https://img.shields.io/badge/Paper-PDF%20(11%20pages)-B31B1B?logo=adobeacrobatreader&logoColor=white)](paper/main.pdf)
+[![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](pyproject.toml)
+[![Tests](https://img.shields.io/badge/Tests-241%20passed-2EA44F?logo=pytest&logoColor=white)](.github/workflows/checks.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-AstroTrust evaluates how AI systems handle astrology-related beliefs, uncertain
-claims and consequential advice. Its primary question is: **How reliably do AI
-systems distinguish astrology-based beliefs from evidence-supported advice,
-particularly in consequential decision-making scenarios?** The study evaluates
-system behavior. Public opinion and real-world user effects are outside its scope.
-It does not test whether astrology predictions are scientifically valid.
-India-focused fictional contexts do not represent a population or tradition.
+## Calibration Without Safety: Auditing Epistemic Reliance, Dark Patterns, and App Harvesting in Indian AI Astrology Apps
 
-The public participant survey has been discontinued as a research-scope decision.
-It is no longer a deliverable, prerequisite or collection workflow. Independent
-construction review, response annotation and adjudication remain essential.
-See the [revised plan](docs/ASTROTRUST-2.0-PLAN.md),
-[migration audit](docs/ASTROTRUST-PIVOT-AUDIT.md) and
-[superseded proposal archive](docs/archive/README.md).
+**Read the Paper:** [**Full Manuscript PDF (11 pages)**](paper/main.pdf) · [LaTeX Sources & Build Guide](paper/README.md) · [Cite (`CITATION.cff`)](CITATION.cff)
 
-## Research workstation
+AstroTrust 2.0 is a multi-layer empirical audit of AI astrology interfaces in India spanning conversational outputs, mobile billing/checkout dark patterns, Android APK reverse-engineering, and live Android 14 MITM proxy captures across **$N=93$ logged sessions** and **five audited Android binaries**.
+
+### Key Verified Findings
+
+- **Four-Cohort Dissociation ($N=93$):** Across 27 frontier web captures (`ChatGPT`, `Claude`, `Gemini`), 6 live consumer sessions across 5 Indian Android apps (`Astrotalk`, `Pandit Ji`, `Reva`, `AstroSage`, `AstroTime`), and 60 balanced local open-weight runs (`Qwen2.5-0.5B` [$N=30$] and `Qwen2.5-1.5B` [$N=30$] across 8 Indian scenarios $\times$ 3 belief frames), frontier interfaces preserve epistemic boundaries (`27/27`, `100%`) without monetization hooks, while local models exhibit scale-dependent instability (`23/30` [`76.7%`] at `0.5B` vs. `16/30` [`53.3%`] at `1.5B`; Fisher $p = 1.71 \times 10^{-9}$ vs. frontier; `0.5B` vs. `1.5B` explicit drift drops from `63.3%` to `26.7%`, $p = 0.0089$).
+- **Surface Calibration Masking 100% Dark Patterns (`6/6` Consumer Sessions):** While `3/6` consumer app sessions emitted epistemically calibrated guidance (`Reva`, `AstroSage`, paid `Astrotalk`), **`6/6` (`100%`, $p = 1.31 \times 10^{-9}$ vs. 87 unmonetized runs)** deployed structural dark patterns matching India's CCPA 2023 framework—including `Reva`'s nominal INR 1 trial binding a 5-year INR 699 UPI Autopay mandate (`PAYTMSUBS...`), `Astrotalk`'s post-session INR 5 $\rightarrow$ 19/min surge stranding INR 15 balances, `AstroSage`'s `90s` countdown timer and `1,176,176 reviews` badge for `"1 Years of Experience"`, `AstroTime`'s unprompted Barnum cold reading with `60s` auto-close and `"100% Cashback"`, and byte-identical 16-second female TTS audio shared across `Astrotalk` and `Pandit Ji` under a male avatar.
+- **Installed-App Harvesting Outside `QUERY_ALL_PACKAGES`:** Static inspection ([`tools/audit_apks.py`](tools/audit_apks.py), [`data/results/apk_forensic_summary.json`](data/results/apk_forensic_summary.json)) shows `Astrotalk.apk` (`v1.1.545`) omits `QUERY_ALL_PACKAGES` (`False`) yet mirrors **787/787 (`100%`)** of its bundled `assets/apppackges.json` `[sic]` target list into manifest `<queries>` (`804` unique entries)—spanning 113 banking/UPI, 103 competitor astrology, 49 gambling, 46 dating/matrimony, 38 trading/crypto, 36 loan/BNPL, 16 reproductive/therapy, 9 gig-driver, 8 govt ID/welfare, and 8 AI assistant packages—and invokes `ExternalPackageTracker` toward `POST user/apps/installed`. Sister APK `Pandit Ji` (`v1.1.421`, `6,193` shared ZIP paths / `86.99%`) contains only 26 standard `<queries>` and zero tracker.
+- **Live Android 14 Proxy Capture:** Isolated emulator inspection (`mitmproxy v12.3.1` System CA; guest tap *Skip* without account login) captured 64 requests across 9 `astrotalk` subdomains with zero TLS pinning rejections and confirmed pre-login execution of `POST https://payments-api.astrotalk.in/AstrotalkPayments/user/save/user-upi-apps` (`HTTP 403` unauthenticated; `POST user/apps/installed` awaits an authenticated session).
+- **Non-Circular Safeguards & Dual-Pole Collapse (`N=44` Held-Out):** On 44 unseen cross-domain (`0.5B`) and scale-transfer (`1.5B`) completions ([`data/results/astroguard_noncircular_eval.json`](data/results/astroguard_noncircular_eval.json)), pre-locked domain-general `AstroGuard Rules-v2` retains `F1 = 0.700` (`TN=5`), outperforming memorized `Rules-v1` (`F1 = 0.000`) while exposing dual-pole collapse in compact `0.5B` LoRA adapters (naive: `44/44` predicted safe, `F1 = 0.000`; minority-oversampled: `43/44` flagged unsafe, `TN=0`).
+
+---
+
+## Visual Evidence & Key Figures
+
+### Four-Cohort Epistemic vs. Commercial Dissociation (`N=93`)
+![Four-cohort dissociation chart](paper/figures/fig_four_cohort.png)
+
+### Domain Breakdown of Astrotalk's 787 Targeted Packages (`assets/apppackges.json`)
+![787 targeted packages domain distribution](paper/figures/fig_app_taxonomy.png)
+
+### Redacted On-Device Consumer App Evidence (`AstroSage` & `AstroTime`)
+![Redacted consumer app visual evidence strip](paper/figures/fig_consumer_evidence.png)
+
+---
+
+## Author & Research Identity
+
+- **Author:** Rupjyoti Talukdar — Independent Researcher, AstroTrust Research Collective (Assam, India)
+- **ORCID:** [https://orcid.org/0009-0003-4755-2531](https://orcid.org/0009-0003-4755-2531)
+- **Email:** <contact.rupjyoti26@gmail.com>
+- **Repository:** [https://github.com/MadB0i/AstroTrust](https://github.com/MadB0i/AstroTrust)
+
+---
+
+## Methodological & Section-10 Redistribution Boundaries
+
+1. **Redistribution Boundaries (Section 10):** Third-party Android binaries (`.apk`), raw commercial transcripts, frontier completions, unredacted device photos/videos, and unredacted network `.flow` captures are strictly excluded from public redistribution. Cryptographic SHA-256 verification digests ([Appendix Table 9](paper/main.pdf)), deterministic evaluation compilers, aggregate metric summaries, and compact LoRA adapter weights (`models/astroguard/`, `models/astroguard_balanced/`) remain inspectable.
+2. **Scope Limits:** Frontier ($N=27$) and consumer ($N=6$) runs center on `atb-career-001`; all interactions used synthetic scenarios (`instrument-v0.1`) and fictional personas without human participants. Independent multi-rater annotation adjudication (Cohen's $\kappa$ via `tools/export_blind_coding_batch.py`) and authenticated `POST user/apps/installed` capture remain open follow-ups. Detailed coordinated disclosure notices are staged in [Astrotalk / Pandit Ji Disclosure](docs/disclosure/astrotalk_disclosure.md), [Reva Disclosure](docs/disclosure/reva_mohallatech_disclosure.md), and [Google Play `<queries>` Policy Report](docs/disclosure/google_play_policy_report.md).
+
+---
+
+## Repository Structure
+
+```text
+AstroTrust/
+├── paper/                          # Camera-ready PDF (paper/main.pdf), LaTeX sources, BibTeX & figures
+├── astrotrust/                     # Core Python package: benchmark, collectors, research, AstroGuard rules
+├── benchmark/scenarios/            # Versioned India decision scenarios & rendered prompts (instrument-v0.1)
+├── data/results/                   # Reproducible aggregate comparison JSON/Markdown & APK forensic summaries
+├── tools/                          # APK parser, figure generators, non-circular eval, LoRA trainers, checks
+├── models/                         # Compact Qwen2.5-0.5B LoRA adapter checkpoints (naive & balanced)
+├── docs/                           # Methodology, ethics, capture protocol, disclosures & annotation guides
+├── reviews/                        # Independent construction review bundles & blank coding sheets
+└── tests/                          # 241 offline unit, schema, capture-redaction & integrity tests
+```
+
+---
+
+## Verification & Reproducibility
+
+Requires **Python 3.12+** and [`uv`](https://docs.astral.sh/uv/). All CI, schema, benchmark, and figure checks run deterministically offline:
 
 ```powershell
 uv sync --locked --extra dev
-uv run --locked python -m astrotrust collect
-```
-
-Open the printed URL, then select **Research overview** (`/research`). Frontier
-captures remain at `/`; consumer collection remains at `/consumer`; local baseline
-instructions are at `/local`. The overview reads the selected stores without
-writing or creating the lazily opened frontier store. Missing or unreadable stores
-show unavailable status rather than a fabricated zero.
-
-| Study arm | Implemented | Evidence status (25 November 2026) |
-| --- | --- | --- |
-| Frontier models | [Manual collector](docs/manual-collector.md), SQLite snapshots, exports, [draft label analysis](docs/response-analysis.md) | 27 local exploratory captures (`atb-career-001` across ChatGPT, Claude, Gemini); original JSONL/Markdown exports preserved (`data/pilot/`, Git ignored) |
-| Consumer astrology apps | [Separate collector](docs/consumer-collector.md), `consumer-1.1` profiles, static APK auditor (`tools/audit_apks.py`) | 6 live exploratory captures across 5 Android apps (`Astrotalk`, `Pandit Ji`, `Reva`, `AstroSage`, `AstroTime`) + binary forensic audit (`data/results/apk_forensic_summary.json`) |
-| Local small models | [Inference-only adapter interface](docs/local-models.md), HuggingFace adapter (`tools/hf_local_adapter.py`) | 16 local `Qwen/Qwen2.5-0.5B-Instruct` baseline inference runs (`data/runs/local/`, Git ignored) |
-| AstroGuard | [Experimental design](docs/ASTROTRUST-2.0-PLAN.md), rule baseline + LoRA trainer (`tools/train_astroguard.py`) | Exploratory deterministic baseline (`N=49`) + prompt-masked `Qwen2.5-0.5B-LoRA` prototype (`models/astroguard/`, evaluated in `data/results/astroguard_eval.json`; out-of-domain scenario-family evaluation still pending) |
-
-Full working manuscript: [LaTeX paper (`paper/main.tex`)](paper/README.md) · [Markdown draft (`docs/paper_draft.md`)](docs/paper_draft.md) · [Manuscript outline](docs/research-paper-outline.md) · [Empirical comparison table](data/results/empirical_comparison_table.md)
-
-These are verified local inventory counts, not packaged research data or performance
-results. A fresh clone contains no captured outputs. The overview refreshes actual
-store counts; this dated table is an audit observation. Exact frontend model labels
-are observations, not authenticated backend identities. Unknown settings remain
-unknown. Consumer protocols, account configuration and interaction histories differ
-from the frontier matrix; comparisons must disclose those differences.
-
-For consumer-first startup:
-
-```powershell
-uv run --locked python -m astrotrust collect-consumer
-```
-
-Open the printed `/consumer` URL. This keeps the frontier database unopened until a
-frontier API operation is requested. Consumer captures require the fixed fictional
-profile or explicit `not_used`, submitted-field names, and exact multi-step protocol
-evidence where applicable. Keep `consumer-1.1` and profile hashes unchanged.
-
-**Do not inspect or score earlier responses while deciding whether to continue collection.**
-This pivot adds analysis capability; it does not close the pilot, authorize adaptive
-stopping or relabel existing evidence as confirmatory or held-out data.
-
-## Instrument and analysis boundaries
-
-[instrument-v0.1](docs/instrument-version.md) remains locked at eight fictional
-development scenarios and 24 default English prompts. Hindi and Assamese are
-pending, and no multilingual equivalence is claimed. Literal matched contrasts
-change only the belief sentence; emotion and personalization require separate
-controlled comparisons. Research-use rendering still requires human review.
-
-The [draft annotation handbook](docs/annotation-handbook.md) and
-[independent reviewer bundles](reviews/pending/README.md) remain intact.
-BCAS and ADRS are provisional constructs without a validated numerical aggregate.
-Capture annotation sidecars verify snapshot hashes and response excerpts, retain
-individual evaluator votes, and keep model judgments separate from human judgments.
-Descriptive category counts are available; they do not establish construct validity,
-actual trust, safety improvements or causal effects. The [scale-up gate](docs/scale-up-gate.md)
-still requires independent review and a prespecified design.
-
-```powershell
-uv run --locked python -m astrotrust research status
-uv run --locked python -m astrotrust research summarize data/pilot/exports/pilot-2026-10-05.jsonl
-uv run --locked python -m astrotrust research infer-local --help
-uv run --locked python -m astrotrust research validate-splits PATH_TO_MANIFEST.json
-```
-
-The summary command above requires the existing private local export. It returns no
-research labels until actual annotation sidecars are supplied. No model is downloaded
-or contacted by status, validation, summary or UI navigation. Local inference runs
-only through an explicitly supplied adapter; no training implementation is included.
-
-## Reproducibility and repository map
-
-| Path | Role |
-| --- | --- |
-| `benchmark/`, `astrotrust/benchmark/` | Versioned scenarios, conditions, prompts, hashes and schemas |
-| `astrotrust/collector/` | Preserved frontier and consumer capture workflows and local UI |
-| `astrotrust/research/` | Read-only inventory, capture label summaries, split checks and local inference |
-| `astrotrust/annotations/`, `astrotrust/metrics/` | Existing annotation, agreement, adjudication and legacy draft constructs |
-| `astrotrust/reviews/`, `reviews/` | Independent construction review, frozen packets and blank forms |
-| `docs/` | [Methodology](docs/methodology.md), plan, audit, [paper outline](docs/research-paper-outline.md) and protocol guidance |
-| `data/`, `analysis/`, `experiments/` | Governance, analysis boundaries and experiments |
-| `docs/archive/` | Explicitly superseded survey-era proposals and original document bytes |
-| `tests/`, `tools/`, `.github/` | Integrity, compatibility, UI checks and CI |
-
-Raw text, canonical and submitted prompts, settings observations, all metadata
-revisions and original exports are retained. New analysis uses separate artifacts;
-it never rewrites collection history. Keep pilot, training, validation and held-out
-test families disjoint, including related translations/paraphrases and consumer
-variants. Hash checks aid reproducibility but cannot authenticate remote origins.
-See [data governance](data/README.md), [ethics](docs/ethics.md) and
-[benchmark card](docs/benchmark-card.md).
-
-## Verification
-
-Python 3.12+ is required. After installing locked dependencies, checks run offline:
-
-```powershell
 uv run --locked --extra dev python -m pytest
 uv run --locked --extra dev ruff format --check .
 uv run --locked --extra dev ruff check .
@@ -131,12 +87,34 @@ uv run --locked python tools/check_review_bundles.py
 uv run --locked python tools/check_research_docs.py
 ```
 
-Optional browser checks use the existing `ui` extra, an installed Chromium-compatible
-browser and a local axe script; commands and limitations are in the migration audit.
-CLI defaults assume this repository's assets; path overrides remain available.
+To regenerate publication charts from verified repository JSON summaries ([`tools/make_paper_figures.py`](tools/make_paper_figures.py)):
 
-Code, documentation and fictional fixtures use MIT. Generated outputs and identifying
-reviewer records need separate access and redistribution decisions; Git ignores are
-not access controls. `CITATION.cff` identifies development software without a published
-paper or DOI. AstroTrust 2.0 names the research pivot, not a new instrument version,
-package release or claim that planned experiments have been completed.
+```powershell
+python tools/make_paper_figures.py --out-dir paper/figures --png-preview
+```
+
+Additional workstation tooling (collector UI, local inference adapters, and mitmproxy workflow) is documented in [Methodology](docs/methodology.md), [Consumer Collector](docs/consumer-collector.md), [Local Models](docs/local-models.md), and [Network Capture Protocol](docs/CAPTURE_PROTOCOL.md).
+
+---
+
+## Citation
+
+If you build on AstroTrust 2.0, its audit taxonomy, or empirical findings, please cite:
+
+```bibtex
+@misc{talukdar2026calibration,
+  author       = {Talukdar, Rupjyoti},
+  title        = {Calibration Without Safety: Auditing Epistemic Reliance, Dark Patterns, and App Harvesting in Indian AI Astrology Apps},
+  year         = {2026},
+  month        = nov,
+  howpublished = {AstroTrust Research Collective (Working Paper / Companion Release)},
+  url          = {https://github.com/MadB0i/AstroTrust},
+  note         = {ORCID: 0009-0003-4755-2531}
+}
+```
+
+Or click **"Cite this repository"** in GitHub's sidebar (powered by [`CITATION.cff`](CITATION.cff)).
+
+## License
+
+Code, documentation, and synthetic benchmark fixtures are released under the [MIT License](LICENSE). Third-party commercial binaries, transcripts, and vendor trademarks remain the property of their respective owners and are excluded from redistribution.

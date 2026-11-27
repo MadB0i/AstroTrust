@@ -700,6 +700,26 @@ def categorize_tracked_apps(apps_raw: list[dict[str, str]]) -> dict[str, int]:
     return dict(counts.most_common())
 
 
+def _scan_sdk_signals(blob: bytes) -> list[str]:
+    low = blob.lower()
+    markers = (
+        ("appsflyer", b"appsflyer"),
+        ("rudderstack", b"rudder-prod" if b"rudder-prod" in low else b"rudderstack"),
+        ("posthog", b"posthog"),
+        ("clevertap", b"clevertap"),
+        ("mixpanel", b"mixpanel"),
+        ("razorpay", b"razorpay"),
+        ("paytm_sdk", b"paytm"),
+        ("cashfree", b"cashfree"),
+        ("phonepe_sdk", b"phonepe"),
+        ("firebase", b"firebase"),
+        ("rootbeer_libtoolchecker", b"toolchecker"),
+        ("packagemanager_getinstalled", b"getinstalledpackages"),
+        ("packagemanager_queryintent", b"queryintentactivities"),
+    )
+    return sorted({label for label, token in markers if token in low})
+
+
 def inspect_single_apk(path: Path) -> dict[str, Any]:
     """Return static manifest, asset, and endpoint summary for one APK."""
     if not path.is_file():
@@ -716,35 +736,45 @@ def inspect_single_apk(path: Path) -> dict[str, Any]:
         dex_files = sorted(n for n in names if n.startswith("classes") and n.endswith(".dex"))
         has_apppackges = "assets/apppackges.json" in names
         has_rn = "assets/index.android.bundle" in names
+        dex_and_bundle_blobs = [
+            zf.read(t) for t in dex_files + (["assets/index.android.bundle"] if has_rn else [])
+        ]
+        combined_code_blob = b"".join(dex_and_bundle_blobs)
 
         tracker_evidence: dict[str, Any] = {}
         if has_apppackges:
             apps_raw = json.loads(zf.read("assets/apppackges.json").decode("utf-8"))
             tracked_pkgs = {entry["package_name"] for entry in apps_raw}
             qset = set(manifest["unique_query_packages"])
-            dex_blob = b"".join(zf.read(d) for d in dex_files)
             tracker_evidence = {
                 "apppackges_entries": len(apps_raw),
                 "apppackges_unique_packages": len(tracked_pkgs),
                 "manifest_query_coverage_of_apppackges": len(tracked_pkgs & qset),
-                "dex_has_external_package_tracker": b"ExternalPackageTracker" in dex_blob,
-                "dex_has_execute_24h_check": b"execute_24h_check" in dex_blob,
-                "dex_has_user_apps_installed_route": b"user/apps/installed" in dex_blob,
-                "dex_has_save_user_upi_apps_route": b"save/user-upi-apps" in dex_blob,
+                "dex_has_external_package_tracker": b"ExternalPackageTracker" in combined_code_blob,
+                "dex_has_execute_24h_check": b"execute_24h_check" in combined_code_blob,
+                "dex_has_user_apps_installed_route": b"user/apps/installed" in combined_code_blob,
+                "dex_has_save_user_upi_apps_route": b"save/user-upi-apps" in combined_code_blob,
                 "category_breakdown": categorize_tracked_apps(apps_raw),
             }
 
-        # Check Astrotalk / sibling domain strings in DEX & RN bundle
+        # Check first-party / sibling backend domain strings in DEX & RN bundle
         url_re = re.compile(rb"https?://[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[A-Za-z0-9._/-]*)?")
         first_party_urls: Counter[str] = Counter()
-        for target in dex_files + (["assets/index.android.bundle"] if has_rn else []):
-            blob = zf.read(target)
+        for blob in dex_and_bundle_blobs:
             for m in url_re.findall(blob):
                 u = m.decode("utf-8", "ignore")
                 low = u.lower()
                 if any(
                     kw in low
-                    for kw in ("astrotalk", "astrobuddy", "theastrotime", "revaastro", "sharechat")
+                    for kw in (
+                        "astrotalk",
+                        "astrobuddy",
+                        "theastrotime",
+                        "revaastro",
+                        "sharechat",
+                        "astrosage",
+                        "ojassoft",
+                    )
                 ) and not any(bad in low for bad in ("cdn-sc-g.sharechat.com", "schema")):
                     first_party_urls[u[:100]] += 1
 
@@ -758,6 +788,7 @@ def inspect_single_apk(path: Path) -> dict[str, Any]:
         "react_native_hermes": has_rn,
         "manifest": {k: v for k, v in manifest.items() if k != "unique_query_packages"},
         "unique_query_packages_count": len(manifest["unique_query_packages"]),
+        "sdk_signals": _scan_sdk_signals(combined_code_blob),
         "tracker_evidence": tracker_evidence,
         "top_first_party_urls": [u for u, _ in first_party_urls.most_common(12)],
         "_zip_infos": infos,

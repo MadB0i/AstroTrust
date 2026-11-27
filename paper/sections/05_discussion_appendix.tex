@@ -2,26 +2,36 @@
 \label{sec:policy}
 
 \paragraph{Methodological Limits.}
-Our findings carry four clear boundaries. First, our live consumer audit covers $N=6$ sessions across 5 Indian apps, and our human coding reflects single-researcher deterministic inspection rather than independent multi-rater adjudication with $\kappa/\alpha$ reliability estimates. Second, because all consumer and frontier captures center on the \texttt{atb-career-001} scenario family, the 10-sample \texttt{AstroGuard-LoRA} evaluation measures in-domain behavior only rather than held-out cross-domain generalization over financial or clinical scenarios. Third, static APK reverse-engineering establishes client-side collection and upload (\texttt{POST user/apps/installed} and \texttt{save/user-upi-apps}) rather than server-side pricing formulas; only backend access or regulatory discovery can determine whether uploaded app lists alter dynamic per-minute quotes or chatbot prompts. Fourth, downloading \texttt{AstroSage AI.apk} yielded a zero-byte artifact, restricting our audit of that platform to live UI capture (\texttt{consumer-9a013e2c}).
+Our findings carry four clear boundaries. First, our live consumer audit covers $N=6$ sessions across 5 Indian apps, and single-researcher deterministic inspection plus non-circular manual auditing (\nolinkurl{data/astroguard/heldout_unseen_labeled.jsonl}) await independent multi-rater adjudication with Cohen's $\kappa$; we provide a masked 40-unit second-coder packet (\nolinkurl{tools/export_blind_coding_batch.py}) compatible with our repository's $\kappa$ CLI (\texttt{astrotrust annotations agreement}). Second, while our local evaluation now spans all 8 domains $\times 3$ belief frames across two parameter scales ($N=60$, enabling genuine out-of-domain testing), our frontier web ($N=27$) and live consumer ($N=6$) runs remain centered on \texttt{atb-career-001}. Third, live proxy capture on an Android~14 emulator confirmed unauthenticated execution of \texttt{POST save/user-upi-apps}, whereas \texttt{POST user/apps/installed} awaits an authenticated test session, and server-side dynamic pricing logic remains outside client-side observability. Fourth, we evaluated static binary forensics across all five live-audited APKs (\texttt{Astrotalk}, \texttt{Pandit Ji}, \texttt{Reva}, \texttt{AstroTime}, and \texttt{AstroSage AI} \texttt{v32.6}); broader Play Store sampling across additional vendors remains future work.
 
+\newpage
 \paragraph{Governance Recommendations for India.}
 \begin{itemize}[leftmargin=*,itemsep=2pt,topsep=3pt]
 \item \textbf{Close the Android \texttt{<queries>} Loophole:} App stores should apply \texttt{QUERY\_ALL\_PACKAGES}-equivalent policy review whenever an app declares large enumerated \texttt{<queries>} blocks (e.g., $>50$ unrelated consumer packages), preventing vulnerability catalogs like \texttt{Astrotalk}'s 787-app list from bypassing Play visibility safeguards.
+\item \textbf{Enforce DPDP Act~2023 Purpose Limitation and Data Minimization:} Under India's Digital Personal Data Protection Act, 2023~\citep{dpdp2023}, personal data processing must be limited to what is strictly necessary for a specified purpose; probing 787 unrelated banking, lending, gambling, reproductive-health, and welfare packages---and transmitting UPI app lists prior to login---exceeds any legitimate horoscope-delivery purpose.
 \item \textbf{Enforce CCPA Rules on Nominal-Fee UPI Mandates:} Offering an introductory INR~1 consultation screen that registers a multi-year INR~699 recurring UPI Autopay mandate warrants direct scrutiny under India's CCPA \emph{Subscription Trap} and \emph{Bait and Switch} provisions, alongside upfront per-minute rate locks to stop post-session surges stranding wallet balances.
 \item \textbf{Restrict Anti-Audit \texttt{FLAG\_SECURE} Blocks:} Operating systems and consumer regulators should limit screenshot blocking (\texttt{FLAG\_SECURE}) to OTP, PIN, and payment-entry views rather than AI consultation transcripts so users and auditors can document financial or medical claims made inside paid chats.
 \end{itemize}
 
+\paragraph{Responsible Disclosure and Research Ethics.}
+All prompts and consumer app interactions relied exclusively on synthetic scenarios and fictional personas (\texttt{consumer-profile-001} and fictional chat inputs), with zero real-user data, participant recruitment, or human-subject records. Consumer billing verification used minimal single-session test amounts (INR~1 and INR~11.81) with immediate UPI Autopay mandate revocation after checkout capture. Binary auditing inspected publicly distributed APKs strictly via non-destructive static parsing, and dynamic proxy capture ran on an isolated researcher-controlled Android~14 emulator without probing or modifying external backend systems. Coordinated disclosure notices detailing \texttt{Astrotalk}'s 787-app \texttt{<queries>} catalog and guest \texttt{save/user-upi-apps} telemetry, \texttt{Reva}'s INR~1-to-INR~699 UPI Autopay flow, and the \texttt{Pandit Ji} clone findings are prepared for submission to Astrotalk, Mohalla Tech, and Google Play Trust \& Safety prior to public release.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Across $N=93$ logged interactions, five disassembled Android binaries, and live Android~14 proxy telemetry, our audit demonstrates a stark dissociation: \emph{surface epistemic calibration does not guarantee consumer product safety}. General-purpose frontier models uphold non-empirical boundaries without monetization hooks (27/27), while unmonetized small open-weight models exhibit scale-dependent epistemic instability (76.7\% at 0.5B vs.\ 53.3\% at 1.5B). Indian consumer AI astrology apps, by contrast, pair calibrated text disclaimers (3/6 sessions) with 100\% structural dark patterns (6/6 sessions)---including five-year UPI Autopay traps behind INR~1 trials, post-session rate surges, and cross-app audio/identity clones---while \texttt{Astrotalk}'s 787-app \texttt{<queries>} catalog and pre-login \texttt{save/user-upi-apps} telemetry operate completely outside text-only checks. Securing high-stakes consumer AI therefore requires paired text and binary/wire auditing (\texttt{Rules-v2} plus \texttt{AstroAudit}) alongside targeted enforcement under India's CCPA~2023 and DPDP~2023 frameworks.
+
 \section{Reproducibility and Cryptographic Appendix}
 \label{sec:repro}
 
-All code, benchmark scenario JSON schemas, and verification scripts are maintained publicly at \url{https://github.com/MadB0i/AstroTrust} and validated continuously offline via \texttt{pytest} (238 passing tests), \texttt{ruff}, \texttt{mypy --strict}, scenario schema checks, and doc-link verification. In compliance with third-party platform terms and repository governance, raw commercial/frontier transcripts and third-party APKs are kept out of Git while deterministic compilation tables, rule sets, compact LoRA weights (\texttt{models/astroguard/}), and SHA-256 digests remain reproducible.
+Scenario fixtures, APK parsing scripts, evaluation tables, and cryptographic SHA-256 verification digests are preserved in the AstroTrust companion archive (\url{https://github.com/MadB0i/AstroTrust}). In compliance with platform terms of service and third-party copyright boundaries, raw commercial transcripts, frontier completions, and third-party Android binaries are excluded from public redistribution, while deterministic metric compilers and compact LoRA adapter weights remain inspectable. Table~\ref{tab:hashes} records the full 64-character SHA-256 verification digests for all five audited APKs and all six consumer app transcripts.
 
 \begin{table*}[t]
 \centering
 \caption{Full 64-character SHA-256 verification digests for audited APKs and live consumer app transcripts.}
 \label{tab:hashes}
-\footnotesize
-\begin{tabularx}{\textwidth}{@{}L{5.0cm} Y@{}}
+\scriptsize
+\begin{tabularx}{\textwidth}{@{}L{6.25cm} Y@{}}
 \toprule
 \textbf{Artifact / Run ID} & \textbf{SHA-256 Digest (Verified Local Binary / Transcript)} \\
 \midrule
@@ -29,6 +39,7 @@ All code, benchmark scenario JSON schemas, and verification scripts are maintain
 \texttt{Pandit Ji.apk} (97.03~MB, \texttt{v1.1.421}) & \texttt{d08a504021748671f03df7b6cc21d18fd6dbb1e73ef6ae0c369b71dc42b1b647} \\
 \texttt{Reva.apk} (38.41~MB, \texttt{v2026.24.2}) & \texttt{d399c180003c497cb4dec8b3543c28f162fe425e24e4e0051ee7a25805ae28e7} \\
 \texttt{AstroTime.apk} (25.76~MB, \texttt{v4.1.8}) & \texttt{0ff2c9d297cf548f656db975b2a16dd49d49d3588e871b4b8a25777b041049ef} \\
+\texttt{AstroSage AI.apk} (76.56~MB, \texttt{v32.6}) & \texttt{b3e34255ec8df245f2bf01b2df9129cdb9ca6ffb8277176cf73cde7466ded6b6} \\
 \midrule
 \texttt{consumer-3e64123e43794eefb6f7465a6aaecd3b} & \texttt{ff527ec9d792af2e4f27791e81199cfba056e7c72d6503478d1636f3830e1fa2} \\
 \texttt{consumer-e8678302a7774fab9045ec31ed49b3c9} & \texttt{0f6505484b9c23b9b53c0f5149230ddbbeffbaabbc892caba079b8c7cfad33b0} \\

@@ -23,7 +23,7 @@
    - Transparent disclosure of exploratory pilot status and synthetic profile deviation (`consumer-profile-001` snapshot vs. `"Rohan Sharma"` interactive inputs).
 4. **Live Consumer App Audit ($N=6$ Sessions, 5 Android Apps):**
    - **Astrotalk (`Ritu Ji` free & paid ₹11.81):** `0:16` Zeigarnik audio cliffhanger, `FLAG_SECURE`, post-session `₹5/min -> ₹19/min` surge leaving `₹15` orphaned balance, retention questions closing calibrated text.
-   - **Pandit Ji (sister reskin):** Identical `"Hi Jagira"` banner, shared planetary chart (`Asc 24.14, Sa 8.95, Me 25.46`), byte-identical `0:16` female audio paired with male rishi avatar (`"dekh rahi hoon"`), `FLAG_SECURE`, `"2025"` year mismatch, upsell to `'Astro Alokik'`.
+   - **Pandit Ji (sister reskin):** Identical `[REDACTED_TEST_HANDLE]` banner, shared planetary chart (`Asc 24.14, Sa 8.95, Me 25.46`), byte-identical `0:16` female audio paired with male rishi avatar (`"dekh rahi hoon"`), `FLAG_SECURE`, `"2025"` year mismatch, upsell to `'Astro Alokik'`.
    - **Reva (`ShareChat` / `Mohalla Tech`):** Surface-calibrated `reflective_only` text paired with `₹1` initial payment binding a 5-year `₹699` recurring UPI Autopay mandate (`PAYTMSUBS6111125150547561489`) and immediate `₹699 / 3 months` paywall.
    - **AstroSage Kundli (`Rahasya Veda`):** `1m30s` free timer (`₹1/min -> ₹19/min`), synthetic `"1 Years of Experience"` and `"1,176,176 reviews"` counter, calibrated career answer ending with salary-package hook.
    - **AstroTime (`Elitegem Global`):** Unprompted Barnum cold-reading (`"aap kaafi emotional bhi ho..."`) within 30–60s, `60s` inactivity auto-close, `100% Cashback` recharge prompt, shared onboarding phrasing despite separate React Native stack.

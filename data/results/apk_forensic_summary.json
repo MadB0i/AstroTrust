@@ -20,6 +20,19 @@
         "query_intent_tags": 14
       },
       "unique_query_packages_count": 804,
+      "sdk_signals": [
+        "appsflyer",
+        "cashfree",
+        "clevertap",
+        "firebase",
+        "packagemanager_getinstalled",
+        "packagemanager_queryintent",
+        "paytm_sdk",
+        "phonepe_sdk",
+        "razorpay",
+        "rootbeer_libtoolchecker",
+        "rudderstack"
+      ],
       "tracker_evidence": {
         "apppackges_entries": 787,
         "apppackges_unique_packages": 787,
@@ -81,6 +94,18 @@
         "query_intent_tags": 13
       },
       "unique_query_packages_count": 26,
+      "sdk_signals": [
+        "appsflyer",
+        "cashfree",
+        "clevertap",
+        "firebase",
+        "packagemanager_queryintent",
+        "paytm_sdk",
+        "phonepe_sdk",
+        "razorpay",
+        "rootbeer_libtoolchecker",
+        "rudderstack"
+      ],
       "tracker_evidence": {},
       "top_first_party_urls": [
         "https://astrotalk.com/shared/call-recording/",
@@ -116,6 +141,14 @@
         "query_intent_tags": 9
       },
       "unique_query_packages_count": 83,
+      "sdk_signals": [
+        "appsflyer",
+        "firebase",
+        "packagemanager_queryintent",
+        "paytm_sdk",
+        "phonepe_sdk",
+        "razorpay"
+      ],
       "tracker_evidence": {},
       "top_first_party_urls": [
         "https://revaastro.in/privacyPolicy",
@@ -143,6 +176,14 @@
         "query_intent_tags": 13
       },
       "unique_query_packages_count": 9,
+      "sdk_signals": [
+        "clevertap",
+        "firebase",
+        "packagemanager_queryintent",
+        "paytm_sdk",
+        "phonepe_sdk",
+        "posthog"
+      ],
       "tracker_evidence": {},
       "top_first_party_urls": [
         "https://apis.theastrotime.combineFuncss-treeForkCountInvalid"
@@ -150,8 +191,45 @@
     },
     {
       "filename": "AstroSage AI.apk",
-      "status": "empty_stub_0_bytes",
-      "size_bytes": 0
+      "status": "ok",
+      "size_bytes": 76561544,
+      "sha256": "b3e34255ec8df245f2bf01b2df9129cdb9ca6ffb8277176cf73cde7466ded6b6",
+      "zip_entry_count": 4888,
+      "dex_count": 6,
+      "react_native_hermes": false,
+      "manifest": {
+        "package": "com.ojassoft.astrosage",
+        "version_name": "32.6",
+        "version_code": 1244,
+        "permissions_count": 36,
+        "has_query_all_packages": false,
+        "has_detect_screen_capture": false,
+        "query_package_tags": 23,
+        "query_intent_tags": 12
+      },
+      "unique_query_packages_count": 23,
+      "sdk_signals": [
+        "firebase",
+        "packagemanager_queryintent",
+        "paytm_sdk",
+        "phonepe_sdk",
+        "razorpay"
+      ],
+      "tracker_evidence": {},
+      "top_first_party_urls": [
+        "https://go.astrosage.com/akwa",
+        "https://astrosage.com/images/astrox/tarot_maaya_large.png",
+        "http://m2.astrosage.com/compatibility/default.asp",
+        "https://astrology.astrosage.com/",
+        "https://japi.astrosage.com/astrosage-xml/placedetailsv5.asp",
+        "https://jyotish.astrosage.com/",
+        "http://astrology.astrosage.com/",
+        "http://b.astrosage.com/",
+        "http://buy.astrosage.com",
+        "http://buy.astrosage.com/",
+        "http://buy.astrosage.com/astrologer",
+        "http://buy.astrosage.com/miscellaneous/astrosage-brihat-horoscope"
+      ]
     }
   ],
   "astrotalk_vs_panditji_overlap": {

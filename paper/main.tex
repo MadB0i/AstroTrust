@@ -3,6 +3,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{newtxtext,newtxmath}
+\usepackage[zerostyle=a]{newtxtt}
 \usepackage[margin=0.72in,top=0.82in,bottom=0.82in,columnsep=0.22in]{geometry}
 \usepackage{microtype}
 \usepackage{booktabs}
@@ -10,6 +11,7 @@
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{seqsplit}
+\usepackage{graphicx}
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{fancyhdr}
 \usepackage[numbers,sort&compress]{natbib}
@@ -19,9 +21,18 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 \usepackage{enumitem}
-\usepackage{xurl}
-\usepackage[colorlinks=true,linkcolor=accentblue,citecolor=accentblue,urlcolor=accentblue]{hyperref}
-\usepackage{balance}
+\usepackage{url}
+\usepackage[
+  colorlinks=true,
+  linkcolor=accentblue,
+  citecolor=accentblue,
+  urlcolor=accentblue,
+  pdftitle={Calibration Without Safety: Auditing Epistemic Reliance, Dark Patterns, and App Harvesting in Indian AI Astrology Apps},
+  pdfauthor={Rupjyoti Talukdar},
+  pdfsubject={AI Safety, Epistemic Reliance, Dark Patterns, Mobile Privacy Auditing, AstroTrust 2.0},
+  pdfkeywords={AI safety, epistemic reliance, dark patterns, Android forensics, astrology AI, India}
+]{hyperref}
+\def\UrlBreaks{\do\/\do\-\do\_\do\.\do\$}
 
 \definecolor{accentblue}{RGB}{32,78,138}
 \definecolor{alertred}{RGB}{172,44,44}
@@ -37,7 +48,7 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\footnotesize\textit{AstroTrust 2.0 Working Paper (India Audit)}}
+\fancyhead[L]{\footnotesize\textit{Calibration Without Safety: Auditing Indian AI Astrology Apps}}
 \fancyhead[R]{\footnotesize\thepage}
 \renewcommand{\headrulewidth}{0.3pt}
 \fancypagestyle{plain}{%
@@ -46,15 +57,17 @@
   \renewcommand{\headrulewidth}{0pt}
 }
 
-\title{\Large\bfseries Calibration Without Safety: Auditing Epistemic Reliance, Monetization Dark Patterns, and Installed-App Harvesting in AI Astrology Apps in India}
+\title{\Large\bfseries Calibration Without Safety: Auditing Epistemic Reliance, Dark Patterns, and App Harvesting in Indian AI Astrology Apps}
 
 \author{
-  \textbf{MadB0i}\\
-  AstroTrust Research Collective\\
+  \textbf{Rupjyoti Talukdar}\\
+  Independent Researcher, AstroTrust Research Collective (Assam, India)\\
+  \href{mailto:contact.rupjyoti26@gmail.com}{\texttt{contact.rupjyoti26@gmail.com}} $\cdot$
+  ORCID: \href{https://orcid.org/0009-0003-4755-2531}{0009-0003-4755-2531}\\
   \url{https://github.com/MadB0i/AstroTrust}
 }
 
-\date{November 2026 (Overleaf Preprint Draft)}
+\date{November 2026}
 
 \begin{document}
 
@@ -66,7 +79,6 @@
 \input{sections/04_eval_astroguard}
 \input{sections/05_discussion_appendix}
 
-\balance
 \bibliographystyle{plainnat}
 \bibliography{references}
 
