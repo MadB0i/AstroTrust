@@ -49,5 +49,6 @@ data/captures/*
 !paper/figures/*.pdf
 !paper/figures/*.png
 
-# Local publication-release prep kit (Zenodo/arXiv/disclosure bundles)
+# Local publication-release prep kit & non-public disclosure drafts
 release_kit/
+docs/disclosure/

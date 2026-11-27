@@ -47,7 +47,7 @@ AstroTrust 2.0 is a multi-layer empirical audit of AI astrology interfaces in In
 ## Methodological & Section-10 Redistribution Boundaries
 
 1. **Redistribution Boundaries (Section 10):** Third-party Android binaries (`.apk`), raw commercial transcripts, frontier completions, unredacted device photos/videos, and unredacted network `.flow` captures are strictly excluded from public redistribution. Cryptographic SHA-256 verification digests ([Appendix Table 9](paper/main.pdf)), deterministic evaluation compilers, aggregate metric summaries, and compact LoRA adapter weights (`models/astroguard/`, `models/astroguard_balanced/`) remain inspectable.
-2. **Scope Limits:** Frontier ($N=27$) and consumer ($N=6$) runs center on `atb-career-001`; all interactions used synthetic scenarios (`instrument-v0.1`) and fictional personas without human participants. Independent multi-rater annotation adjudication (Cohen's $\kappa$ via `tools/export_blind_coding_batch.py`) and authenticated `POST user/apps/installed` capture remain open follow-ups. Detailed coordinated disclosure notices are staged in [Astrotalk / Pandit Ji Disclosure](docs/disclosure/astrotalk_disclosure.md), [Reva Disclosure](docs/disclosure/reva_mohallatech_disclosure.md), and [Google Play `<queries>` Policy Report](docs/disclosure/google_play_policy_report.md).
+2. **Scope Limits:** Frontier ($N=27$) and consumer ($N=6$) runs center on `atb-career-001`; all interactions used synthetic scenarios (`instrument-v0.1`) and fictional personas without human participants. Independent multi-rater annotation adjudication (Cohen's $\kappa$ via `tools/export_blind_coding_batch.py`) and authenticated `POST user/apps/installed` capture remain open follow-ups.
 
 ---
 
@@ -61,7 +61,7 @@ AstroTrust/
 ├── data/results/                   # Reproducible aggregate comparison JSON/Markdown & APK forensic summaries
 ├── tools/                          # APK parser, figure generators, non-circular eval, LoRA trainers, checks
 ├── models/                         # Compact Qwen2.5-0.5B LoRA adapter checkpoints (naive & balanced)
-├── docs/                           # Methodology, ethics, capture protocol, disclosures & annotation guides
+├── docs/                           # Methodology, ethics, capture protocol & annotation guides
 ├── reviews/                        # Independent construction review bundles & blank coding sheets
 └── tests/                          # 241 offline unit, schema, capture-redaction & integrity tests
 ```
