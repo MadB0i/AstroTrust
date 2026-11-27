@@ -38,5 +38,5 @@ strict = true
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["playwright.*", "torch.*", "transformers.*", "peft.*", "datasets.*"]
+module = ["playwright.*", "torch.*", "transformers.*", "peft.*", "datasets.*", "huggingface_hub.*"]
 ignore_missing_imports = true
