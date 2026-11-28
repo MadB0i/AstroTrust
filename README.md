@@ -1,6 +1,7 @@
 # AstroTrust 2.0
 
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0003--4755--2531-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0003-4755-2531)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24623712.svg)](https://doi.org/10.5281/zenodo.24623712)
 [![Paper PDF](https://img.shields.io/badge/Paper-PDF%20(11%20pages)-B31B1B?logo=adobeacrobatreader&logoColor=white)](paper/main.pdf)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](pyproject.toml)
 [![Tests](https://img.shields.io/badge/Tests-241%20passed-2EA44F?logo=pytest&logoColor=white)](.github/workflows/checks.yml)
@@ -8,7 +9,7 @@
 
 ## Calibration Without Safety: Auditing Epistemic Reliance, Dark Patterns, and App Harvesting in Indian AI Astrology Apps
 
-**Read the Paper:** [**Full Manuscript PDF (11 pages)**](paper/main.pdf) · [LaTeX Sources & Build Guide](paper/README.md) · [Cite (`CITATION.cff`)](CITATION.cff)
+**Read the Paper:** [**Full Manuscript PDF (11 pages)**](paper/main.pdf) · [**Zenodo Record (`10.5281/zenodo.24623712`)**](https://doi.org/10.5281/zenodo.24623712) · [LaTeX Sources & Build Guide](paper/README.md) · [Cite (`CITATION.cff`)](CITATION.cff)
 
 AstroTrust 2.0 is a multi-layer empirical audit of AI astrology interfaces in India spanning conversational outputs, mobile billing/checkout dark patterns, Android APK reverse-engineering, and live Android 14 MITM proxy captures across **$N=93$ logged sessions** and **five audited Android binaries**.
 
@@ -107,9 +108,10 @@ If you build on AstroTrust 2.0, its audit taxonomy, or empirical findings, pleas
   title        = {Calibration Without Safety: Auditing Epistemic Reliance, Dark Patterns, and App Harvesting in Indian AI Astrology Apps},
   year         = {2026},
   month        = nov,
-  howpublished = {AstroTrust Research Collective (Working Paper / Companion Release)},
-  url          = {https://github.com/MadB0i/AstroTrust},
-  note         = {ORCID: 0009-0003-4755-2531}
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.24623712},
+  url          = {https://doi.org/10.5281/zenodo.24623712},
+  note         = {Concept DOI (all versions): 10.5281/zenodo.24623711; Code: https://github.com/MadB0i/AstroTrust; ORCID: 0009-0003-4755-2531}
 }
 ```
 

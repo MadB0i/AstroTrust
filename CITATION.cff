@@ -8,10 +8,18 @@ authors:
     affiliation: "Independent Researcher, AstroTrust Research Collective"
     email: "contact.rupjyoti26@gmail.com"
     orcid: "https://orcid.org/0009-0003-4755-2531"
-date-released: 2026-11-27
+date-released: 2026-11-28
 version: "2.0.0"
+doi: "10.5281/zenodo.24623712"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24623712"
+    description: "Zenodo Preprint Record (v2.0.0)"
+  - type: doi
+    value: "10.5281/zenodo.24623711"
+    description: "Zenodo Concept DOI (all versions)"
 repository-code: "https://github.com/MadB0i/AstroTrust"
-url: "https://github.com/MadB0i/AstroTrust"
+url: "https://doi.org/10.5281/zenodo.24623712"
 license: "MIT"
 abstract: >-
   AstroTrust 2.0 audits AI astrology systems across conversational epistemic calibration,
@@ -37,4 +45,7 @@ preferred-citation:
       orcid: "https://orcid.org/0009-0003-4755-2531"
   year: 2026
   month: 11
-  url: "https://github.com/MadB0i/AstroTrust"
+  doi: "10.5281/zenodo.24623712"
+  url: "https://doi.org/10.5281/zenodo.24623712"
+  publisher:
+    name: "Zenodo"
