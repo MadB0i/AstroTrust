@@ -11,6 +11,10 @@
 >
 > **GitHub Release:** [**`v2.0.0` (Preprint PDF + Audit Suite)**](https://github.com/MadB0i/AstroTrust/releases/tag/v2.0.0) · **LaTeX Sources:** [`paper/`](paper/README.md) · **Author:** [Rupjyoti Talukdar](https://orcid.org/0009-0003-4755-2531)
 
+<p align="center"><img src="paper/figures/fig_four_cohort.png" alt="Four-cohort comparison across Frontier LLMs, Consumer Apps, and Local Qwen2.5 models showing 100% commercial dark patterns despite partial text calibration" width="88%" /></p>
+
+*Four-cohort dissociation across 93 audited sessions: **Safe Calibrated\*** requires both calibrated chat text and zero dark patterns (consumer apps score 0% due to 100% dark-pattern prevalence despite half emitting calibrated disclaimers). See all figures and verification tables on [Zenodo](https://doi.org/10.5281/zenodo.24623712).*
+
 ## Why This Audit Matters
 
 Text-only AI safety benchmarks evaluate chat bubbles in isolation and miss product-level risks such as checkout traps and background telemetry. In Indian consumer AI astrology apps, an interface can emit cautious, calibrated guidance inside the chat window while billing flows and Android binaries introduce undisclosed financial and privacy hazards. AstroTrust 2.0 pairs conversational evaluation with mobile static forensics and live network inspection in one reproducible suite.
